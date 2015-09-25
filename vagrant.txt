@@ -1,3 +1,63 @@
 skapa nytt vagrant projekt
 ==========================
+
+Detta ger en ubunty v.12.04:
 vagrant init --force hashicorp/precise64
+
+Detta ger en ubuntu v.14.04:
+vagrant init --force ubuntu/trusty64
+
+Köra kommandon över ssh - Ange kommandon i Vagrentfile
+==========================================================
+config.vm.provision "shell", inline: "sudo apt-get update"
+
+Köra shell script från Vagrant
+===============================
+config.vm.provision "shell", path: "provision.sh"
+
+upload a file to the vm
+==========================
+  config.vm.provision "file", source: "test.txt", destination: "test.txt"
+
+move file to proper place (as user vagrant, but ok to move into a root folder)
+============================
+  config.vm.provision "shell", inline: "mv test.txt /etc/test.txt"
+
+
+managing boxes
+==============
+add: This command adds a new box
+list: This command lists all boxes installed
+outdated: This command checks whether any boxes have updates available
+remove: This command removes a box from the host
+repackage: This command converts a Vagrant environment into a distributable box
+update: This command will update the box being used by the current running Vagrant environment
+
+ex.
+vagrant box add ––force packt http://our-server.vagrant/packt.box
+
+
+kolla status
+============
+vagrant global-status
+
+
+shared/synched folder
+=====================
+i vagrant maskinen man skapar kan man gå till /vagrant för att hitta till delade resurser mellan värd och gäst
+
+uppdatera syslog
+================
+add repo:
+>sudo add-apt-repository ppa:adiscon/v8-stable 
+If you want to add the repositories  manually (not recommended) follow this link.
+
+Then update your apt cache:
+>sudo apt-get update
+
+Finally install the new rsyslog version:
+>sudo apt-get install rsyslog
+
+configure host only network
+============================
+config.vm.network "hostonly", "192.168.33.10"

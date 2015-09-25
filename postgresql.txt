@@ -1,0 +1,25 @@
+
+installation
+============
+1. follow this guide
+http://www.postgresonline.com/journal/archives/329-An-almost-idiots-guide-to-install-PostgreSQL-9.3,-PostGIS-2.1-and-pgRouting-with-Yum.html
+
+2. initialize and start database 
+>sudo service postgresql-9.3 initdb
+Initializing database:                                     [  OK  ]
+>sudo /etc/init.d/postgresql-9.3 start
+
+3. The 'postgres' user is created at installation time
+
+4. You will need to become the operating system user under which PostgreSQL was installed (usually postgres) to create the first user account
+>sudo su - postgres
+> createuser fredrik -drs   : cretes superuser with rights to add databases and roles
+
+5. skapa en databas åt fredrik:
+>createdb          :creates a db with default name of the user,  i.e. fredrik
+
+if psql version abd server version are not the same
+===================================================
+http://postgresqlarea.blogspot.se/2014/11/psql-warning-psql-version-84-server.html
+
+

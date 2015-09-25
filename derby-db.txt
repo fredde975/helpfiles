@@ -1,0 +1,21 @@
+sätta variabler
+================
+export DERBY_HOME=~/db-derby-10.11.1.1-bin
+export PATH=~/db-derby-10.11.1.1-bin/bin:$PATH
+
+
+starta servern
+==============
+>startNetworkServer
+
+starta klienten
+===============
+>ij
+>connect 'jdbc:derby:MyDbTest;create=true';   skapa databasen MyDbTest
+>connect 'jdbc:derby:db;create=true';
+
+Connect to a database
+=====================
+>connect 'jdbc:derby:MyDbTest';
+
+

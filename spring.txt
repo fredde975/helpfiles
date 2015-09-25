@@ -1,0 +1,329 @@
+Running examples from book
+==========================
+>file->import->existing projects into workspace
+Välj tex chapter2 som root och välj importera
+
+0. Välj close project och öppna sedan aktuellt projet som ska köras
+1. Build Path | Configure Build Path
+2. Add External JARs button from the Libraries tab
+spring-aop-4.1.4.RELEASE
+spring-aspects-4.1.4.RELEASE
+spring-beans-4.1.4.RELEASE
+spring-context-4.1.4.RELEASE
+spring-context-support-4.1.4.RELEASE
+spring-core-4.1.4.RELEASE
+spring-expression-4.1.4.RELEASE
+commons-logging-1.2
+3. lägg till library -> system JRE
+4. ta bort ev felaktiga libbar
+5. To execute the example, run the MainClass.java file. Right-click on
+MainClass.java and navigate to Run As | Java Application
+
+
+inversion of control
+======================
+IoC is a programming technique in which object coupling is bound at runtime by an assembler object and is usually not known at compile time using static analysis.
+
+The IoC pattern inverts responsibility of the managing the life cycle from the application to the framework.
+
+What is a container
+=====================
+In software development terminology, the word "container" is used to describe any component that can contain other components inside it.
+
+Spring Container
+===================
+Spring Container manages the components of applications using DI. The configuration metadata, which can be represented in XML, Java annotations, or Java code, helps Spring Container to decide the object to initiate, configure, and assemble.
+
+
+IoC Container
+=============
+The Spring IoC container is represented by the interface
+org.springframework.context.ApplicationContext, which is responsible for
+instantiating, configuring, and assembling beans.
+
+The Spring IoC container is responsible for instantiating, configuring, and
+retrieving your Spring beans. The Spring IoC container enforces DI in its
+various forms and employs a number of established design patterns to achieve
+this.
+
+Both the containers, BeanFactory and ApplicationContext, are responsible for
+providing DI.
+
+These containers initiate a registered bean, populate the bean's properties,
+and call the init() method to make the bean ready for use. The destroy()
+method of bean is invoked during the shutdown of the application. The init()
+and destroy() methods reflect the Servlet life cycle, where initialization can
+be performed during the init() method and cleanup during the destroy() method.
+
+BeanFactory example
+====================
+Let's assume that beans are configured in the beans.xml file located in the C drive:
+...
+<bean id="mybean" class="...">
+  ...
+</bean>
+...
+The code snippet to load the configuration file using BeanFactory is given as follows:
+
+BeanFactory bfObj = new XmlBeanFactory (new FileSystemResource ("c:/beans.xml");
+
+MyBean beanObj= (MyBean) bfObj.getBean ("mybean");
+
+ApplicationContext
+==================
+Like BeanFactory, ApplicationContext is also used to represent Spring Container, built upon 
+the BeanFactory interface. ApplicationContext is suitable for Java EE applications, and it 
+is always preferred over BeanFactory. All functionality of BeanFactory is included in
+ApplicationContext.
+
+ApplicationContext is an active container that initiates all the configured
+beans as soon as the ApplicationContext instance is created and before the
+user calls the getBean() method. The advantage of this active creation of
+beans by ApplicationContext is the handling of exceptions during the startup
+of the application itself
+
+Injecting inner beans
+=====================
+Similar to the concept of inner classes in Java, it is also possible to define
+a bean inside another bean; for example, in an Automated Teller Machine (ATM)
+system, we can have a printer bean as an inner bean of the ATM class.
+
+The following are the characteristics of inner beans in Spring:
+
+A bean can optionally be declared as an inner bean when it doesn't need to be
+shared with other beans.
+An inner bean is defined within the context of its enclosing bean.
+Typically, the inner bean does not have an ID associated with it because the
+inner bean will not be shared outside of its enclosing bean. We can associate
+an ID; however, the value of this ID attribute is ignored by Spring.
+The inner class is independent of the inner bean. Any class can be defined as
+an inner bean; for instance, a Printer class is not an inner class, but a
+printer bean is defined as an inner bean.
+The scope of an inner bean is always a prototype.
+The limitations of using inner beans are as follows:
+
+It cannot be reused or shared with other beans
+In practice, it affects the readability of the configuration file
+
+
+Autowireing
+===========
+The Spring Framework provides autowiring features where we don't need to
+provide bean injection details explicitly. The Spring container can autowire
+relationships between collaborating beans without using the <constructor-arg>
+and <property> elements. This immensely helps in cutting down the XML
+configuration. Spring is capable of automatically resolving dependencies at
+runtime. This automatic resolution of bean dependencies is also called
+autowiring.
+
+<bean id="foo" class ="Foo" autowire="autowire-type" />
+
+
+The bean's scope
+=================
+Spring provides us with beans after instantiating and configuring them. Spring
+Container manages objects. This means that any object can refer to any other
+object from Spring Container using the bean's ID, and Spring Container
+provides an instance of the requesting object.
+
+When we start Spring Container, ApplicationContext reads the Spring
+configuration, file looks for all bean definitions available there, and then
+initializes beans before any call to the getBean() method.
+
+During initialization, ApplicationContext itself has initialized all the
+Spring beans configured in Spring XML. When another object makes a call to the
+getBean() method, ApplicationContext returns the same reference of bean that
+has already been initialized. This is the default behavior of beans.
+
+This leads to the concept of a bean's scope. We can choose the number of
+instances of beans depending on the scope. There are different scopes in which
+a bean can be configured. The <bean> tag has a scope attribute that is used to
+configure the scope of the bean. There are different bean scopes in Spring,
+such as singleton, prototype, request, session, and global session. We will
+understand each session one by one.
+
+Singleton
+=========
+By default, all Spring beans are singleton.  Once ApplicationContext is
+initialized, it looks at all the beans in XML and initializes only one bean
+per bean definition in Spring Container. On each call to the getBean() method,
+Spring Container returns the same instance of the bean.
+
+The singleton pattern in general says that overall there will be only one
+instance of the object. But when we talk about singleton in the Spring
+Framework, we are talking about Spring Container alone.
+
+We can have multiple containers running in the same JVM, so we can have
+multiple instances of the same bean in same JVM.
+
+So, singleton in Spring represents in a particular Spring container, and there
+is only one instance of a bean created in that container that is used across
+different references.
+
+Prototype
+=========
+The prototype is second bean scope in Spring, which returns a brand-new
+instance of a bean on each call to the getBean() method. When a bean is
+defined as a prototype, Spring waits for getBean() to happen and only then
+does it initialize the prototype. For every getBean() call, Spring has to
+perform initialization, so instead of doing default initialization while a
+context is being created, it waits for a getBean() call. So, every time
+getBean() gets called, it creates a new instance.
+
+The configured destruction life cycle callbacks are not called in the case of
+a prototype. Spring doesn't maintain the complete life cycle of the prototype.
+Here, the container instantiates and configures prototype beans and returns
+this bean to the client with no further record of this prototype instance.
+
+Since every getBean() call creates a new instance of the prototype bean, this
+could lead to performance issues when beans use limited resources such as
+network connections, whereas it may be useful if you would like to get a new
+instance of a domain object, such as an employee object
+
+Session
+=======
+The session is the fourth bean scope in Spring, which is available only in web
+applications that use Spring and create an instance of bean for every HTTP
+session. Here, a new bean is created per session. As long as there is one user
+accessing in a single session, each call to getBean() will return same
+instance of the bean. But if it's a new user in a different session, then a
+new bean instance is created.
+
+Global session
+==============
+The global session is the fifth bean scope in Spring, which works only in
+portlet environments that use Spring and create a bean for every new portlet
+session.
+
+
+The Spring bean life cycle
+==========================
+As long as Spring beans are required by the application, they exist within the
+container. For a bean to get into a usable state after instantiation, it needs
+to perform some initialization. Likewise, some clean up may be necessary when
+the bean is no longer required and is removed from the container.
+
+Spring provides us with callback methods for the life cycle of the bean. You
+can have a method in your bean that runs when the bean has been created, and
+you can also have a method in your bean that is run when the bean is about to
+be destroyed.
+
+Spring's BeanFactory manages the life cycle of beans created through the
+Spring IoC container. The life cycle of beans consist of callback methods,
+which can be categorized broadly into the following two groups:
+
+-Post-initialization callback methods
+-Pre-destruction callback methods
+
+Spring JDBC packages
+====================
+The JDBC abstraction framework provided under the Spring Framework is
+considered to be a value-added service that takes care of all the low-level
+details, such as retrieving connection, preparing the statement object,
+executing the query, and releasing the database resources. While using it for
+data access, the application developer needs to specify the SQL statement for
+executing and retrieving the result.
+
+
+org.springframework.jdbc.core
+=============================
+In the Spring Framework, this package contains the foundation of the JDBC
+classes, which includes the core JDBC class and JdbcTemplate. It simplifies
+the database operation using JDBC.
+
+org.springframework.jdbc.datasource
+====================================
+This package contains DataSource implementations and helper classes, which can
+be used to run the JDBC code outside the JEE container.
+
+org.springframework.jdbc.object
+===============================
+In the Spring Framework, this package contains the classes that help in
+converting the data returned from the database into plain Java objects.
+
+org.springframework.jdbc.support
+================================
+SQLExceptionTranslator is the most important class in this package of the
+Spring Framework. The Spring Framework recognizes the error code used by the
+database. This is done by using this class and mapping the error code to a
+higher level of exception.
+
+org.springframework.jdbc.config
+===============================
+This package contains the classes that support JDBC configuration within
+ApplicationContext of the Spring Framework
+
+
+jdbc template
+=============
+
+
+JDBC batch operation in Spring
+==============================
+The single executable unit for performing multiple operations is known as a
+batch. If you batch multiple calls to the same prepared statement, then most
+of the JDBC drivers show improved performance. Moreover, if you group the
+updates into batches, then you can limit the number of round trips to the
+database, as shown in the following diagram:
+
+The following sample code shows how to use this method:
+
+jdbcTemplate.batchUpdate (new String [] {
+               "update emp set salary = salary * 1.5 where empId = 10101",
+                "update emp set salary = salary * 1.2 where empId = 10231",
+                "update dept set location = 'Bangalore' where deptNo = 304"
+});
+The other method is for executing the SQL statement multiple times with
+different parameters using PreparedStatement, as shown by the following code
+snippet:
+public int[] batchUpdate(String sql, BatchPreparedStatementSetter bPSS) throws
+DataAccessException
+
+
+Calling a stored procedure
+==========================
+A stored procedure is a group of transact SQL statements. If you have a
+situation where you write the same query over and over again, then you can
+save that specific query as a stored procedure and call it just by calling its
+name. Stored procedures are a block of SQL statements that are stored as basic
+objects within your database.
+
+Advantages
+===========
+Stored procedure helps in increasing the performance of an application. Stored
+procedures, once created, are compiled and stored in the database. And this
+compiled version of the stored procedures is used if an application uses the
+stored procedures multiple times in a single connection.
+
+It helps in reducing the traffic between the application and the database
+server. Because, the application has to send the name and the parameter of the
+stored procedures rather than sending the multiple length SQL statements.
+
+Disadvantages
+============
+Stored procedures are difficult to debug and only a few DBMS allow you to
+debug it.
+
+Developing and maintaining the stored procedures is not easy and leads to
+problems in the development and the maintenance phases, as it requires a
+specialized skill set, which the average developer has no interest in
+learning.
+
+Using the SimpleJdbcCall class
+================================
+An instance of the SimpleJdbcCall class is that of a multithreaded and
+reusable object, representing a call to a stored procedure. It provides the
+metadata processing to simplify the code required for accessing the basic
+stored procedure. While executing a call, you only have to provide the name of
+the stored procedure. The names of the supplied parameters are matched with
+the in and out parameters, specified during the declaration of a stored
+procedure. Here, we will discuss the calling of a stored procedure and a
+stored function using the SimpleJdbcCall class.
+
+Calling a stored procedure
+============================
+The SimpleJdbcCall class takes the advantage of the metadata present in the
+database to look up the names of the IN and OUT parameters, and thereby there
+is no need to explicitly declare the parameters. However, you can still
+declare them if you have the parameters that don't have the automatic mapping
+of the class, such as the array parameters.

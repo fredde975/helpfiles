@@ -1,0 +1,172 @@
+three types of syslog:
+-syslog
+-syslog-ng
+-rsyslog
+
+originator ----> relay ----> collector
+
+exempel:
+========
+auth,authpriv.*                 /var/log/auth.log
+*.*;auth,authpriv.none          /var/log/syslog
+syslog.*                        /var/log/rsyslog.log #rsyslog error messages
+#cron.*                         /var/log/cron.log
+#daemon.*                       /var/log/daemon.log
+kern.*                          /var/log/kern.log
+#lpr.*                          /var/log/lpr.log
+mail.*                          /var/log/mail.log
+#user.*                         /var/log/user.log
+
+
+* 			all
+none			nothing
+=			only this level
+!			except this level and higher
+'name of level'		this level and higher
+!= 			not this level
+
+ex.
+mail.info 		matcher info samt alla nivåer över.
+mail.=info		matchar bara info nivån
+mail.info;mail.!err	info <= samt < err
+mail.debug;mail.!= warning	debug <= samt alla nivåer utom warning 
+
+facility
+       LOG_AUTH       security/authorization messages
+       LOG_AUTHPRIV   security/authorization messages (private)
+       LOG_CRON       clock daemon (cron and at)
+       LOG_DAEMON     system daemons without separate facility value
+       LOG_FTP        ftp daemon
+       LOG_KERN       kernel messages (these can't be generated from user processes)
+       LOG_KERN       kernel messages (these can't be generated from user processes)
+       LOG_LOCAL0 through LOG_LOCAL7    reserved for local use
+       LOG_LPR        line printer subsystem
+       LOG_MAIL       mail subsystem
+       LOG_NEWS       USENET news subsystem
+       LOG_SYSLOG     messages generated internally by syslogd(8)
+       LOG_USER (default)  generic user-level messages
+       LOG_UUCP       UUCP subsystem
+
+   level
+       This determines the importance of the message.  The levels are, in order of decreasing importance:
+       LOG_EMERG      system is unusable
+       LOG_CRIT       critical conditions
+       LOG_ERR        error conditions
+       LOG_WARNING    warning conditions
+       LOG_NOTICE     normal, but significant, condition
+       LOG_INFO       informational message
+       LOG_DEBUG      debug-level message
+
+
+actions
+=======
+filename 	apped to file on local machine
+@hostname	forward to syslogd
+@ip		forward to syslogd
+|fifoname	write to named pipe
+user1, user2,..	write to screen of users if they are loged in
+*		write to all users curently logged in
+
+
+
+Vill man att ett meddelade ska både skrivas lokalt och till en server så skriver man två rader i configfilen.
+
+mail.info	@192.168.33.10
+mail.info	/var/log/mail.log
+
+
+restart rsyslog
+===============
+sudo service rsyslog restart
+
+
+Konfigurera klient att skicka till server
+==========================================
+editera /etc/rsyslog.d/50-default.conf
+auth,authpriv.*			@192.168.33.11
+auth,authpriv.*			/var/log/auth.log
+
+
+Konfigurera att server/rsyslogd tar emot udp/tcp
+================================================
+editera /etc/rsyslog.conf
+
+# provides UDP syslog reception
+$ModLoad imudp
+$UDPServerRun 514
+
+# provides TCP syslog reception
+$ModLoad imtcp
+$InputTCPServerRun 514
+
+
+hantera brandvägg på syslogservern
+==================================
+sudo iptables -I INPUT -p udp -i eth1 -s 192.168.33.10 -d 192.168.33.11 --dport 514 -j ACCEPT
+
+
+TLS Guide
+=========
+http://www.rsyslog.com/doc/v8-stable/tutorials/tls_cert_summary.html (mellan datorer)
+https://www.loggly.com/docs/rsyslog-tls-configuration/  (moln tjänst)
+
+Att tänka på: 
+TLS skyddar bara kommunikationen mellan sändare och mottagare - ger inte end-to-end security och autetiserar inte själva meddelandet.
+
+installea rsyslog-gnutls
+>sudo apt-get install rsyslog-gnutls
+
+installera gnutls-bin
+>sudo apt-get install gnutls-bin
+
+
+#1. ca - generate the private key
+certtool --generate-privkey --outfile ca-key.pem
+
+#2. ca - now create the (self-signed) CA certificate itself
+certtool --generate-self-signed --load-privkey ca-key.pem --outfile ca.pem
+
+#generera klient certifikat request
+certtool --generate-privkey --outfile key.pem --bits 2048
+
+#signera klient cert request
+certtool --generate-certificate --load-request request.pem --outfile cert.pem --load-ca-certificate ../ca.pem --load-ca-privkey ../ca-key.pem
+
+#konfigurera rsyslog på klienten
+#This is how the relevant part of rsyslog.conf looks on the target machine:
+
+$DefaultNetstreamDriverCAFile /home/rger/proj/rsyslog/sample/ca.pem
+$DefaultNetstreamDriverCertFile /home/rger/proj/rsyslog/sample/machine-cert.pem
+$DefaultNetstreamDriverKeyFile /home/rger/proj/rsyslog/sample/machine-key.pem
+
+server
+===============================================================================================
+#skapa cert till server på samma sätt som ovan
+
+#konfigurera att ta emot från client
+In this setup, we use wildcards to ease adding new systems. We permit the server to accept messages from systems whos names match *.example.net.
+
+#matchar all input
+$InputTCPServerStreamDriverPermittedPeer *
+
+#matcha single host
+#$InputTCPServerStreamDriverPermittedPeer turing.example.net
+
+
+$ModLoad imuxsock # local messages
+$ModLoad imtcp # TCP listener
+
+# make gtls driver the default
+$DefaultNetstreamDriver gtls
+
+# certificate files
+$DefaultNetstreamDriverCAFile /rsyslog/protected/ca.pem
+$DefaultNetstreamDriverCertFile /rsyslog/protected/machine-cert.pem
+$DefaultNetstreamDriverKeyFile /rsyslog/protected/machine-key.pem
+
+$InputTCPServerStreamDriverAuthMode x509/name
+$InputTCPServerStreamDriverPermittedPeer *.example.net
+$InputTCPServerStreamDriverMode 1 # run driver in TLS-only mode
+$InputTCPServerRun 10514 # start up listener at port 10514
+
+

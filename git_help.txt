@@ -1,0 +1,105 @@
+Do diffs
+=========
+git diff 			 : compares working dir with staging area
+git diff --staged     		 : compares staging area with repository
+git diff commit1 commiit2	 : compares commits
+
+git show "commit-id" 		: shows diff camared to its parent
+
+git log				:
+
+git log -n 1			: show only log for one commit
+
+git add				: add files to staging area
+
+git reset --hard		: reset working dir
+
+
+git checkout master		: checkout branch master
+
+git branch			: status
+
+git branch easy_mode		: create branch
+
+git checkout easy_mode		: checkout branch
+
+git checkout -b branch-name	: create and checkout new branch
+
+git log --graph --oneline master branch-name
+
+git branch -d "branch-name"
+
+set up environment
+==================
+lesson1
+
+merge
+=====
+git merge master branch		: the bracnh will be merged into master
+
+
+resolve merge conflict
+======================
+0. run git status
+1. open file with conflict
+2. edit the areas that are in conflict with each other
+3. git add file-name
+4. git commit
+
+
+set up password caching towards github
+======================================
+git config --global credential.helper cache
+# Set git to use the credential memory cache
+
+git config --global credential.helper 'cache --timeout=3600'
+# Set the cache to timeout after 1 hour (setting is in seconds)
+
+use ssh towards github
+======================
+https://help.github.com/articles/generating-ssh-keys/
+
+synching repositories with github
+=================================
+1. create an empty remote repository at github
+2. push (a branch) master to github
+
+
+To see remote repositories
+==========================
+git remote -v 				: -v for verbose 
+
+add a remote repository
+=======================
+git remote add  origin	url
+
+push changes to remote repository
+=================================
+git push origin master
+
+pull changes from remote repository
+===================================
+git pull origin master
+
+clone repository from github
+============================
+git clone https://github.com/fredde975/recipes.git
+
+updating the local copy of the remote branch: note there is a difference
+between origin/master and the local master branch
+============================================
+git fetch
+
+
+git pull origin master => git fetch origin followed by git merge master origin/master
+
+find out difference between the two local branches:  origin/master (the
+current local repr. of the origin/master located at GitHub) and master 
+=======================================================================
+git log origin/master or git diff origin/master master
+
+
+
+if there are both updates from the "git fetch" command and there
+are updates in my local master branch then "git status" will report that
+master is "out-of-synch"
