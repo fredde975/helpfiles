@@ -103,3 +103,13 @@ git log origin/master or git diff origin/master master
 if there are both updates from the "git fetch" command and there
 are updates in my local master branch then "git status" will report that
 master is "out-of-synch"
+
+environment
+===========
+https://www.udacity.com/wiki/ud775/lesson-1-notes#morsel-30-setting-up-your-workspace-on-mac
+https://www.udacity.com/wiki/ud775/lesson-1-notes#morsel-29-setting-up-your-workspace-on-windows
+
+Unmodifying a Modified File
+===========================
+(use "git checkout -- <file>..." to discard changes in working directory)
+
