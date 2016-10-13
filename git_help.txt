@@ -1,4 +1,76 @@
-Do diffs
+Document about branching and merging:
+https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
+
+
+To create branch and to it at the same time
+===========================================
+git checkout -b my_new_branch
+
+
+merge certain files from branch
+===================================
+
+Checkout the path(s) from the branch you want to merge,
+
+$ git checkout source_branch -- <paths>...
+
+If you need to merge changes selectively, use reset and then add,
+
+$ git reset <paths>...
+$ git add -p <paths>...
+
+Finally commit
+
+$ git commit -m "'Merge' these changes"
+
+
+
+compare files from different branches
+=========================================
+git diff mybranch master -- myfile.cs
+
+
+
+delete a branch
+===============
+git branch -d hotfix
+
+
+undo delete of a file that has been commited locally
+====================================================
+1. ta reda på vad som är comittat
+$ git status
+On branch feature/senast_genomförd
+Your branch is up-to-date with 'origin/feature/senast_genomförd'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+          deleted:    external/src/main/resources/liquibase/tabellstruktur/changelogs/aktiviteter.changelog-1-35.xml <------- ska återställas
+	  new file:   external/src/main/resources/liquibase/tabellstruktur/changelogs/aktiviteter.changelog-1-37.xml
+
+
+2. Ta reda på id på commit för filen som ska återställas
+ git rev-list -n 1 HEAD -- external/src/main/resources/liquibase/tabellstruktur/changelogs/aktiviteter.changelog-1-35.xml
+ c7eac8a1ea1ed758f2edea42da22fa8b06b74e64
+
+3. Återställ filen 
+ git checkout c7eac8a1ea1ed758f2edea42da22fa8b06b74e64  external/src/main/resources/liquibase/tabellstruktur/changelogs/aktiviteter.changelog-1-35.xml
+
+
+4. kolla att filen är återställd
+ git status
+ On branch feature/senast_genomförd
+ Your branch is up-to-date with 'origin/feature/senast_genomförd'.
+ Changes to be committed:
+   (use "git reset HEAD <file>..." to unstage)
+
+           new file:   external/src/main/resources/liquibase/tabellstruktur/changelogs/aktiviteter.changelog-1-37.xml <------- nu är inte längre den återställda filen i listan
+
+
+
+
+
+ diffs
 =========
 git diff 			 : compares working dir with staging area
 git diff --staged     		 : compares staging area with repository
@@ -12,9 +84,14 @@ git log -n 1			: show only log for one commit
 
 git add				: add files to staging area
 
+
+revert everything done in the branch
+====================================
 git reset --hard		: reset working dir
 
 
+checkout the master branch
+==========================
 git checkout master		: checkout branch master
 
 git branch			: status
@@ -112,4 +189,120 @@ https://www.udacity.com/wiki/ud775/lesson-1-notes#morsel-29-setting-up-your-work
 Unmodifying a Modified File
 ===========================
 (use "git checkout -- <file>..." to discard changes in working directory)
+
+
+visa url etc
+============
+$ git remote show origin
+* remote origin
+  Fetch URL: git@git.ws.ams.se:/git/applications/mjukvarukomponent/aktiviteter.git
+    Push  URL: git@git.ws.ams.se:/git/applications/mjukvarukomponent/aktiviteter.git
+      HEAD branch: master
+        Remote branch:
+	    master tracked
+	      Local branch configured for 'git pull':
+	          master merges with remote master
+		    Local ref configured for 'git push':
+		        master pushes to master (up to date)
+
+
+
+Example git push
+==================
+The following example describes one of the standard methods for publishing local contributions to the central repository. 
+First, it makes sure your local master is up-to-date by fetching the central repository’s copy and rebasing your changes 
+on top of them. The interactive rebase is also a good opportunity to clean up your commits before sharing them. 
+Then, the git push command sends all of the commits on your local master to the central repository.
+
+$ git checkout master
+$ git fetch origin master
+$ git rebase -i origin/master
+# Squash commits, fix up commit messages etc.
+$ git push origin master
+
+Since we already made sure the local master was up-to-date, this should result in a fast-forward merge, and git push 
+should not complain about any of the non-fast-forward issues discussed above.
+
+
+Stashing a branch
+==================
+git stash        : stash current branch
+
+git stash pop    : fetch what has been stashed 
+
+
+
+Incorporating a finished feature on develop 
+===========================================
+Finished features may be merged into the develop branch definitely add them to the upcoming release:
+
+$ git checkout develop
+Switched to branch 'develop'
+$ git merge --no-ff myfeature
+Updating ea1b82a..05e9557
+(Summary of changes)
+$ git branch -d myfeature
+Deleted branch myfeature (was 05e9557).
+$ git push origin develop
+
+
+
+
+Delete a remote branch
+=========================
+As of Git v1.7.0, you can delete a remote branch using
+
+git push origin --delete <branchName>
+which is easier to remember than
+
+git push origin :<branchName>
+
+
+rename a file (git has problems recognizing letterchanges in file names otherwise)
+===============
+git mv -f File file
+
+
+show log from a branch
+======================
+$ git reflog show --date=iso origin/planeringsunderlag
+924a08f refs/remotes/origin/planeringsunderlag@{2015-12-03 16:58:37 +0100}: update by push
+a1bde8f refs/remotes/origin/planeringsunderlag@{2015-12-03 16:13:08 +0100}: fetch: fast-forward
+2b29d74 refs/remotes/origin/planeringsunderlag@{2015-12-03 15:38:07 +0100}: update by push
+c641001 refs/remotes/origin/planeringsunderlag@{2015-12-03 13:02:27 +0100}: update by push
+7b923b9 refs/remotes/origin/planeringsunderlag@{2015-12-02 16:59:32 +0100}: update by push
+56ee10f refs/remotes/origin/planeringsunderlag@{2015-12-02 16:59:31 +0100}: fetch origin --progress --prune: fast-forward
+9eda90b refs/remotes/origin/planeringsunderlag@{2015-12-02 13:55:03 +0100}: update by push
+d1a8738 refs/remotes/origin/planeringsunderlag@{2015-12-02 13:22:26 +0100}: update by push
+b9bb1a1 refs/remotes/origin/planeringsunderlag@{2015-12-02 11:39:40 +0100}: update by push
+f8fc074 refs/remotes/origin/planeringsunderlag@{2015-12-02 08:49:53 +0100}: pull --progress --no-stat -v --progress origin planeringsunderlag: fast-forward
+caceb88 refs/remotes/origin/planeringsunderlag@{2015-12-01 16:16:18 +0100}: update by push
+f8d6524 refs/remotes/origin/planeringsunderlag@{2015-12-01 15:42:35 +0100}: update by push
+7386589 refs/remotes/origin/planeringsunderlag@{2015-12-01 15:30:15 +0100}: update by push
+2998576 refs/remotes/origin/planeringsunderlag@{2015-12-01 14:06:14 +0100}: update by push
+aaa35ea refs/remotes/origin/planeringsunderlag@{2015-12-01 13:04:27 +0100}: update by push
+7a5859b refs/remotes/origin/planeringsunderlag@{2015-12-01 10:44:32 +0100}: update by push
+2319dc9 refs/remotes/origin/planeringsunderlag@{2015-12-01 10:42:36 +0100}: fetch origin --progress --prune: fast-forward
+72f1809 refs/remotes/origin/planeringsunderlag@{2015-11-30 15:29:09 +0100}: update by push
+eee5d27 refs/remotes/origin/planeringsunderlag@{2015-11-30 15:07:30 +0100}: update by push
+8c47504 refs/remotes/origin/planeringsunderlag@{2015-11-30 15:07:27 +0100}: fetch origin --progress --prune: fast-forward
+dfd4752 refs/remotes/origin/planeringsunderlag@{2015-11-27 17:02:44 +0100}: update by push
+ef2412e refs/remotes/origin/planeringsunderlag@{2015-11-27 16:18:23 +0100}: update by push
+f3e7dbc refs/remotes/origin/planeringsunderlag@{2015-11-27 16:16:43 +0100}: update by push
+178d51e refs/remotes/origin/planeringsunderlag@{2015-11-27 16:03:08 +0100}: update by push
+17447d6 refs/remotes/origin/planeringsunderlag@{2015-11-27 15:31:37 +0100}: update by push
+60707d6 refs/remotes/origin/planeringsunderlag@{2015-11-27 12:46:15 +0100}: update by push
+8165e61 refs/remotes/origin/planeringsunderlag@{2015-11-27 12:43:15 +0100}: pull --progress --no-stat -v --progress origin planeringsunderlag: fast-forward
+12b9416 refs/remotes/origin/planeringsunderlag@{2015-11-27 10:33:48 +0100}: pull --progress --no-stat -v --progress origin planeringsunderlag: fast-forward
+63fda07 refs/remotes/origin/planeringsunderlag@{2015-11-26 16:39:18 +0100}: update by push
+92ca6cc refs/remotes/origin/planeringsunderlag@{2015-11-26 09:39:24 +0100}: fetch: fast-forward
+7c09dc0 refs/remotes/origin/planeringsunderlag@{2015-11-25 13:18:00 +0100}: update by push
+77a3e24 refs/remotes/origin/planeringsunderlag@{2015-11-25 13:16:58 +0100}: pull --progress --no-stat -v --progress origin planeringsunderlag: fast-forward
+7e84bd9 refs/remotes/origin/planeringsunderlag@{2015-11-25 11:18:25 +0100}: update by push
+512a956 refs/remotes/origin/planeringsunderlag@{2015-11-25 10:39:47 +0100}: update by push
+0dd4838 refs/remotes/origin/planeringsunderlag@{2015-11-25 10:30:02 +0100}: update by push
+f3d68c8 refs/remotes/origin/planeringsunderlag@{2015-11-24 14:02:03 +0100}: update by push
+f285701 refs/remotes/origin/planeringsunderlag@{2015-11-24 10:15:31 +0100}: update by push
+2754c65 refs/remotes/origin/planeringsunderlag@{2015-11-24 07:25:59 +0100}: update by push
+688f3a5 refs/remotes/origin/planeringsunderlag@{2015-11-23 16:56:55 +0100}: update by push
 
