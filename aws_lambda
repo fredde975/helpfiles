@@ -9,6 +9,15 @@ POST
 För att göra en POST till database så ska ett Item skickas i bodyn
 {
     "TableName": "fredrikLambdaTest",
+    "Item": {
+        "nyckel": "plommon",
+        "color": "lila"
+    }
+}
+
+
+{
+    "TableName": "fredrikLambdaTest",
     "Key": {
         "nyckel": "äpple",
         "color": "röd"
