@@ -1,0 +1,32 @@
+Importera först bilderna från telefonen. 
+========================================
+1. koppla in telefonen
+o.s.v.
+
+
+Om man inte hade kryssast i rutan "delete after import" så blir det jobbigt. 
+Man måste då ta bort bilderna manuellt i telefonen, så är gör man:
+1. Launch Image Capture.
+2. Plug in iDevice
+3. Select any/all photos you wish to delete
+4. The Delete button is at the bottom of the window [the 'no-entry' sign]
+
+
+
+Exportera till NAS (192.168.1.88)
+==================================
+1. öppna finder. 
+2. välj "GO" i menyn 
+3. välj connect to server
+4. lägg in ipadressen så får man sedan ett sådant här entry:  smb://192.168.1.88
+5. välj fredrik_bilder och sedan 2016
+
+6. starta Photos och markera de bilder du vill
+7. gå in på File och välj export
+8. välj att exportera original 
+9. välj eller välj inte att ta med "sub folder name"
+
+
+
+
+
