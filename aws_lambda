@@ -1,0 +1,43 @@
+För att köra bluprint "microservice-http-endpoint" då man skapar en lambda med HTTP endpoint
+============================================================================================
+1.För att testa den skapade funktionen gå till API-GW
+2.Välj lamdafunktionen och sedan ANY under funktionsnamnet, 
+då för man ett digram över flödet
+3.Välj sedan Test
+
+POST
+För att göra en POST till database så ska ett Item skickas i bodyn
+{
+    "TableName": "fredrikLambdaTest",
+    "Item": {
+        "nyckel": "plommon",
+        "color": "lila"
+    }
+}
+
+
+{
+    "TableName": "fredrikLambdaTest",
+    "Key": {
+        "nyckel": "äpple",
+        "color": "röd"
+    }
+} 
+
+GET
+För att få ut innehållet i tabellen skicka in TableName som en queryString i URL:en
+dvs lägg till TableName=fredrikLambdaTest
+
+OBS! Har bara lyckat köra dessa funktioner genom att köra test i API-GW. Inte från en valing browser.
+Från browsern får jag: {"message":"Missing Authentication Token"}  
+
+För att lyckas köra API från browser:
+1.Ha rätt URL: https://jr9etefog3.execute-api.eu-west-1.amazonaws.com/prod/fredrikLambdaTest?TableName=fredrikLambdaTest
+2.sätter Authorization till NONE
+3. !!!! Missa inte att klicka i den lilla "bocken" som dyker upp efter man ändrat till NONE !!!   
+4. deploya API:et
+5. Testa
+
+Tror att man måste vänta ett tag efter man deployat för att förändringen ska ha tagit
+
+
