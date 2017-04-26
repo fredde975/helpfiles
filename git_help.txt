@@ -1,3 +1,25 @@
+skapa nytt gitt repo från existerande filer
+-------------------------------------------
+url: https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/ 
+
+ 0.skapa rpot på github, lägg sedan till filer och pusha upp dem med:  
+ 1.git init
+ 2.git add .
+ 3.git commit -m "First commit"
+ 4.git remote add origin https://github.com/fredde975/lambda-services
+ 5.git remote -v
+origin    https://github.com/fredde975/lambda-services (fetch)
+origin    https://github.com/fredde975/lambda-services (push)
+ 6.git push -u origin master
+
+lägg till .gitignore
+git add .gitignore -m "adding gitignore file"
+git add .gitignore
+git commit "adding gitignore file"
+git commit .gitignore -m "adding gitignore file"
+git push
+
+
 Document about branching and merging:
 https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
 

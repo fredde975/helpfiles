@@ -40,4 +40,41 @@ För att lyckas köra API från browser:
 
 Tror att man måste vänta ett tag efter man deployat för att förändringen ska ha tagit
 
+labbarna i kursen acloudguru-labda
+===============================================
+lab1
+---
+skapa en s3 bucket
+aws s3 mb s3://fredrikt-acloudguru-lambda-lab
 
+lista s3 buckets:
+aws s3 ls
+
+ladda upp en fil till min bucket:
+aws s3 cp sample.csv s3://fredrikt-acloudguru-lambda-lab/sample.csv
+
+uppdatera lambda-koden i en funktion jag redan skapat i consolen:
+aws lambda update-function-code --zip-file=fileb://csv_parse.zip --function-name cloudguru-lab1
+
+byt namn på handler-funktionen (blev inte rätt då man använde en blue-print för att skapa funktionen):
+aws lambda update-function-configuration --function-name cloudguru-lab1 --handler csv_read.handler
+
+publisera lamda-funktionen så att den får ett versionsnummer:
+aws lambda update-function-code --zip-file=fileb://csv_parse.zip --function-name cloudguru-lab1 --publish
+
+lab2
+----
+ladda upp kinesis records
+aws kinesis put-records --stream-name lab2-acloudguru-fredrikt --records file://sample_records.json
+
+lab3
+----
+köra test från terminalen i stället för den vanliga labda consolen
+aws lambda invoke --function-name cloudguru-lab3 "$(cat sample_event.json)" output.txt  <--- hade problem att köra denna. blir ngt fel av "$(cat sample_event.json)"
+
+aws lambda invoke --function-name cloudguru-lab3 '$(cat sample_event.json)' <-----använder ' -enkelfnuttar, men ngt blir fel, eller?
+{
+    "FunctionError": "Unhandled",
+    "StatusCode": 200
+}
+ 
