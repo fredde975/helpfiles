@@ -1,0 +1,42 @@
+konfigurera profil
+------------------
+If you have both ~/.aws/credentials and ~/.aws/config you may specify the profile directly with apex --profile <name> when issuing commands. This means you do not have to specify any environment variables, however you must provide it with each operation:
+
+$ apex --profile myapp-prod deploy
+
+[profile apex]
+output = json
+region = eu-west-1
+
+initiera ett nyttprojekt
+------------------------
+>mkdir "myService"
+>cd myService
+>apex init
+
+You’ll be presented with a few prompts, the project’s default Lambda IAM role & policy will be created, then you’re ready to go!
+
+det skapas ett gäng entiteter:
+  [+] creating IAM camping-service_lambda_function role
+  [+] creating IAM camping-service_lambda_logs policy
+  [+] attaching policy to lambda_function role.
+  [+] creating ./project.json
+  [+] creating ./functions
+
+deploya resultatet och testa hello-funktionen
+---------------------------------------------
+>apex deploy
+>apex invoke hello
+{"hello":"world"}
+
+för att deploya till dev/staging
+--------------------------------
+skapa project.dev.json utifrån den ursprungliga project.json. 
+
+>apex deploy hello --env dev
+   • config unchanged          env=dev function=hello
+   • code unchanged            env=dev function=hello
+
+deploya individuella funktioner
+-------------------------------
+You can of course deploy individual functions by specifying them as arguments, such as `apex deploy foo bar`.

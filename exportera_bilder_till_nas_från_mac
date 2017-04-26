@@ -1,7 +1,12 @@
 Importera först bilderna från telefonen. 
 ========================================
 1. koppla in telefonen
-o.s.v.
+2. starta Photos
+3. välj "iphone"
+4. välj tex import new items
+
+Obs! ---------------->  I Finder visas per default bara "modified date" det går att lägga till "creation date"   <-------------------OBS! 
+
 
 
 Om man inte hade kryssast i rutan "delete after import" så blir det jobbigt. 
@@ -29,4 +34,5 @@ Exportera till NAS (192.168.1.88)
 
 
 
-
+20170321 - importerar bilder från fredriks Iphone6
+20170321 - exporterar ut alla bilder från MAC till NAS, 2015xxxx-201170321: ca 14000+ bilder, 101GB 
