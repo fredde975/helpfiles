@@ -1,0 +1,51 @@
+Hur jag fixade mina portproblem då jag ska starta wildfly
+=========================================================
+problemet
+---------
+ERROR: transport error 202: connect failed: Connection refused
+ERROR: JDWP Transport dt_socket failed to initialize, TRANSPORT_INIT(510)
+JDWP exit error AGENT_ERROR_TRANSPORT_INIT(197): No transports initialized [debugInit.c:750]
+FATAL ERROR in native method: JDWP No transports initialized, jvmtiError=AGENT_ERROR_TRANSPORT_INIT(197)
+
+står en port i uppstarten
+=========================
+JAVA_OPTS: "-Dprogram.name=standalone.bat -server -Xms512M -Xmx512M -Dfile.encoding=UTF-8 -Djava.awt.headless=true -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:57399,suspend=y,server=n"
+
+
+och en annan port i konfigurationen
+===================================
+JAVA_OPTS	-agentlib:jdwp=transport=dt_socket,address=127.0.0.1:61918,suspend=y,server=n
+
+
+
+
+*tog bort .idea katalogen för mitt git-projakt
+*startade intellij och öppnade root-pom
+*la till wildfly local
+*provkörde ----------------------> det gick inte
+*ändrade porten till 57399 i JAVA_OPTS   -> trodde det skulle funka, men det gjorde det inte . samma fel igen
+*ändrade porten till 8787: Det stod ngnstans på nätet -> funkade inte
+*ändrade igen till till 57399. Då funkade det plötsligt..................
+
+
+C:\utveckling\wildfly-8.1.0.Final\bin\standalone.bat
+C:\dev\jdk1.8.0_60\bin\java -classpath "C:\dev\JetBrains\IntelliJ IDEA 2016.3.4\lib\idea_rt.jar;C:\dev\JetBrains\IntelliJ IDEA 2016.3.4\lib\util.jar" -Dfile.encoding=windows-1252 com.intellij.rt.execution.CommandLineWrapper C:\Users\thefk\AppData\Local\Temp\classpath com.intellij.javaee.oss.process.JavaeeProcess 63678 com.intellij.javaee.oss.jboss.agent.JBoss71Agent
+Calling "C:\utveckling\wildfly-8.1.0.Final\bin\standalone.conf.bat"
+[2017-03-03 12:06:19,442] Artifact aktiviteter-ear:ear: Server is not connected. Deploy is not available.
+"JAVA_HOME is set in standalone.conf.bat"
+Detected server admin port: 9990
+Detected server http port: 8080
+Setting JAVA property to "C:\dev\jdk1.8.0_60\bin\java"
+===============================================================================
+
+  JBoss Bootstrap Environment
+
+    JBOSS_HOME: "c:\utveckling\wildfly-8.1.0.Final"
+
+      JAVA: "C:\dev\jdk1.8.0_60\bin\java"
+
+        JAVA_OPTS: "-Dprogram.name=standalone.bat -server -Xms512M -Xmx512M -Dfile.encoding=UTF-8 -Djava.awt.headless=true -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:57399,suspend=y,server=n"
+
+	===============================================================================
+
+	Connected to the target VM, address: '127.0.0.1:57399', transport: 'socket'
