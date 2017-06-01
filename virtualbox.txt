@@ -1,0 +1,26 @@
+Installation av centos7 guest på windows host
+=============================================
+
+Valde centos7 eftersom jag hade en iso med centos7 redan
+
+
+På windows host
+---------------
+
+*konfigurera centos 7
+*starta den nya maskinen
+*ladda med guestadditions
+*installera winCDEmu : kan seda dubbelklicka på en .iso för att den ska mountas på en cd med bokstaven V:  
+
+
+på linux guest
+--------------
+
+
+* sudo yum update
+* yum install epel-release
+* yum install dkms kernel-devel
+* yum mount /dev/cdrom /mnt
+* cd /mnt
+* yum install bzip2
+* ./VBoxLinuxAdditions.run
