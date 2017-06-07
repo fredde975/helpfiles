@@ -1,0 +1,167 @@
+använda serverless-plugin-typescript
+------------------------------------
+1. börja med att skapa en tjänst med: sls create ...
+sls create -t aws-nodejs -p schoolService -n schoolService
+
+2. installera plugin
+url: https://www.npmjs.com/package/serverless-plugin-typescript
+   
+står att man ska installera med:       yarn add --dev serverless-plugin-typescript
+men det går även att installera med:   npm install --dev serverless-plugin-typescript <------ installerade på detta sätt
+
+3. Det står att tsconfig.json default ser ut så här:
+
+The default tsconfig.json file used by the plugin looks like this:  <------------ men jag ser inte filen ngnstans, kanske inbakad i pluginen och så får man göra override på det som behövs
+
+{
+  "preserveConstEnums": true,
+  "strictNullChecks": true,
+  "sourceMap": true,
+  "target": "es5",
+  "outDir": ".build",
+  "moduleResolution": "node",
+  "lib": ["es2015"],
+}
+
+skapa en package.json
+---------------------
+npm init  :får en massa frågor som sedan genererar följande fil
+
+{
+  "name": "party-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "serverless-webpack": "^1.0.0-rc.4",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+skapa tsconfig.json
+-------------------
+exempel på tsconfig.json: genereras med "tsc-kommandot"
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,    <----false by default
+        "sourceMap": true,
+        "strictNullChecks": true, <----false by default
+        "noEmitOnError": true     <----false by default, genererar inte ngn .js-fil om fel vid kompileringen
+    }
+}
+
+
+
+debugging typescript
+--------------------
+Kan debugga progammatiskt genom att låta koden stanna vid förprogrammerade breakpoints 
+
+
+starta webservern:
+npm run es6
+
+Se till att mappings är satt till true i tsconfig.json:
+        "sourceMap": true
+
+node --inspect --debug-brk ./samples/hello-world.js
+
+starta chrome-devtools: Cmd-Opt-I on iMac
+
+köra en server från typescript
+==============================
+I package.json: 
+"scripts": {
+    "es6":"./node_modules/.bin/http-server -c-1 .",
+    "types-examples": "node ./samples/learning-types.js",
+    "hello": "node ./samples/hello-world.js",
+    "start": "./node_modules/.bin/ts-node ./server/server.ts",     <---------------------------köra typescript
+    "watch": "./node_modules/.bin/nodemon  -w . --ext \".ts\" --exec \"npm run start\"",
+    "oo": "node ./samples/object-oriented.js"
+  },
+
+Kör i terminalen:
+ npm start
+
+
+
+köra node mot databas
+=====================
+Sequelize is a promise-based ORM for Node.js and io.js. It supports the dialects PostgreSQL, MySQL, MariaDB, SQLite and MSSQL and features solid transaction support, relations, read replication and more.
+http://docs.sequelizejs.com/en/v3/
+
+installera som ett runtime dependency:
+ npm install sequelize -S
+
+installera "type definitions" för att få tillgång att skriva typesäkert i Typescript. De finns sedan tillgängliga under /node_modules/@types/sequelize
+ npm install @types/sequelize -D
+ 
+Använder man ett modernare paket som redan har support för TypeScript så beböver man inte göra detta steg
+
+installer detta för att köra mot postgres:
+ npm install pg -S
+
+
+
+intellij
+========
+ctrl - shift - p :visa vilken typ man får på ett resultat. 
+const result = CourseModel.findAll() :visar type: Promise 
+
+command - shift - o : öppna fil 
+
+installera express http-server
+-------------------------------
+npm install express -S
+
+npm install @types/express -D     <-------- express skrevs innan typescript så vi måste lägga till typerna
+
+node utveckling med hot-reload 
+------------------------------
+npm install nodemon -D
+lägg till under scripts i package.json:     "watch": "./node_modules/.bin/nodemon  -w . --ext \".ts\" --exec \"npm run start\"",
+då kommer man övervaka alla .ts filer som ligger i alla kataloger under "." och man kommer köra kommandot "npm run start"
+
+*kan även lägga till -V för verbose mode
+
+starta med "npm run watch"
+
+lägga till id:n att koppla till felhantering och loggning
+---------------------------------------------------------
+ npm install human-readable-ids -S
+
+har inte bibliteket man installerat några typer så kan man lägga till det till sitt program med: 
+ const hri = require(human-readable-ids).hri;
+
+lägga till en body-parser för express-servern
+----------------------------------------------
+ npm install body-parser -S
+ const bodyParser = require('body-parser');
+
+installera tslint
+------------------
+Specify the following in your tslint.json file:
+
+{
+  "extends": "tslint-config-olo"
+}
+
+
+npm i tslint-config-olo
+
+Finally, we'll add an NPM command named lint in package.json to run TSLint:
+
+"scripts": {
+  "lint": "tslint *.ts"
+},
+
+Now you can run npm run lint to lint all the TypeScript files in the current folder.

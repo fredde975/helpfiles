@@ -1,0 +1,138 @@
+om man får internal server error - implementera då så här
+---------------------------------------------------------
+url: http://forum.serverless.com/t/getting-502-internal-server-error-response-even-though-request-succeeds-in-dynamodb/1522/5
+Make sure to set CORS headers if you are requesting from client https://github.com/serverless/examples/blob/master/aws-node-rest-api-with-dynamodb/todos/create.js#L381
+
+
+
+module.exports.hello = function(event, context, callback) {
+
+    const response = {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS 
+      },
+      body: JSON.stringify({ "message": "Hello World!" })
+    };
+
+    callback(null, response);
+};
+
+
+serverless
+==========
+*Har laddat ner exempelkod från git-repot serverless...
+*Har skapat en user: serverless-deploy med administrstor access (borde begränsas)
+
+
+
+installera specifik version av serverless
+-----------------------------------------
+npm install serverless@1.6.1
+
+välj exempel
+------------
+cd aws-node-simple-http-endpoint
+
+skapa en funktion
+-----------------
+serverless create -t aws-nodejs --path first-example --name first-example
+
+testa lokalt
+------------
+serverless invoke local --function currentTime
+
+deploy (verkar som om den inte kan deploya om man inte anger region - Jo...ange stage och region i yml-filen)
+ ------
+serverless  deploy -r eu-west-1 -s dev
+
+resultat av deploy
+---------------------------------------------------------------
+Serverless: Creating Stack...
+Serverless: Checking Stack create progress...
+.....
+Serverless: Stack create finished...
+Serverless: Packaging service...
+Serverless: Uploading CloudFormation file to S3...
+Serverless: Uploading service .zip file to S3 (1.69 KB)...
+Serverless: Updating Stack...
+Serverless: Checking Stack update progress...
+.................................
+Serverless: Stack update finished...
+Service Information
+service: serverless-simple-http-endpoint
+stage: dev
+region: eu-west-1
+api keys:
+  None
+endpoints:
+  GET - https://e7v1k4x0h6.execute-api.eu-west-1.amazonaws.com/dev/ping
+functions:
+  serverless-simple-http-endpoint-dev-currentTime
+
+
+deploy till olika environments
+-------------------------------
+sls deploy                 <------------- inskrivet i serverless.yaml att dev är default
+sls deploy -s prod 
+
+köra funktionen currentTime (måste ange region)
+---------------------------------------------------------------------
+serverless invoke -r eu-west-1 -f currentTime --log
+
+{
+    "statusCode": 200,
+    "body": "{\"message\":\"Hello, the current time is 20:53:38 GMT+0000 (UTC).\"}"
+}
+--------------------------------------------------------------------
+START RequestId: fa754ecb-fdf7-11e6-91a1-d136505c3d57 Version: $LATEST
+END RequestId: fa754ecb-fdf7-11e6-91a1-d136505c3d57
+REPORT RequestId: fa754ecb-fdf7-11e6-91a1-d136505c3d57	Duration: 3.08 ms	Billed Duration: 100 ms 	Memory Size: 1024 MB	Max Memory Used: 10 MB
+
+
+exempel på custom- och environmentvariabler i serverless.yml
+------------------------------------------------------------
+service: serverless-lab3-fredrik
+custom:
+  TABLE_NAME: op-serverless-lab3-fredrik
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  environment:
+        TABLE_NAME_ENV: ${self:custom.TABLE_NAME} <--------- använder custom variabel
+        REGION_ENV: ${self:provider.region}       <--------- använder custom variabel
+
+  stage: dev
+  region: eu-west-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http: GET hello
+
+resources:
+  Resources:
+    DynamoDbTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.TABLE_NAME} <--------- använder custom variabel
+        AttributeDefinitions:
+
+Sedan används environmentvariablerna så här i lambdafunktionen:
+var AWS = require('aws-sdk');
+var REGION = process.env.REGION_ENV;
+var tableName = process.env.TABLE_NAME_ENV;
+
+
+Använda dynamodb
+----------------
+1. skapa tabell i consolen, tex houseTable med index houseOwner
+
+
+
+
+
+
