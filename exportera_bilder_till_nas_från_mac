@@ -17,6 +17,18 @@ Man måste då ta bort bilderna manuellt i telefonen, så är gör man:
 4. The Delete button is at the bottom of the window [the 'no-entry' sign]
 
 
+Exportera till NAS - alt 1
+--------------------------
+Gör detta i "photos":
+If you want to store your original image files on the NAS select all of the photos in the library and with the File ➙ Export Unmodified Originals menu option export the original files to a folder on the Desktop. Then use your uploader to copy that folder to the NAS.
+
+Gör detta på NAS:
+1.Logga in på NAS i browsern.
+2.Öppna filstation.
+3.välj målfil, högerklicka. Välj upload.
+  
+
+
 
 Exportera till NAS (192.168.1.88)
 ==================================
