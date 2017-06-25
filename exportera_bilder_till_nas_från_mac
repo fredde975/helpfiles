@@ -30,6 +30,11 @@ Gör detta på NAS:
 
 
 
+Ta bort alla bider från iphone
+------------------------------
+Just connect your phone using the appropriate cable and open up Image Capture (which should be located in your Applications folder). A window should appear showing all the photos on your phone. Click on the window, then press Command + A to select all your pics. Next, click the delete button (it looks like a circle with a line through it), press Delete when the warning prompt appears, and that's it - you'll have removed all of the photos from your iPhone.
+
+
 Exportera till NAS (192.168.1.88)
 ==================================
 1. öppna finder. 
