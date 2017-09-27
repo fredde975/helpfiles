@@ -2,7 +2,7 @@ skapa nytt gitt repo från existerande filer
 -------------------------------------------
 url: https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/ 
 
- 0.skapa rpot på github, lägg sedan till filer och pusha upp dem med:  
+ 0.skapa root på github, lägg sedan till filer och pusha upp dem med:  
  1.git init
  2.git add .
  3.git commit -m "First commit"
