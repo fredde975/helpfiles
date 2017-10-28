@@ -1,3 +1,8 @@
+20170321 - importerar bilder från fredriks Iphone6
+20170321 - exporterar ut alla bilder från MAC till NAS, 2015xxxx-201170321: ca 14000+ bilder, 101GB
+20171028 - importerar bilder från fredriks Iphone6§:w
+
+
 Importera först bilderna från telefonen. 
 ========================================
 1. koppla in telefonen
@@ -9,12 +14,21 @@ Obs! ---------------->  I Finder visas per default bara "modified date" det går
 
 
 
-Om man inte hade kryssast i rutan "delete after import" så blir det jobbigt. 
-Man måste då ta bort bilderna manuellt i telefonen, så är gör man:
+Om man inte hade kryssast i rutan "delete after import" så gör man i datorn:
 1. Launch Image Capture.
-2. Plug in iDevice
+2. Koppla in telefon 
 3. Select any/all photos you wish to delete
 4. The Delete button is at the bottom of the window [the 'no-entry' sign]
+
+
+
+Ladda upp filer till NAS2 med photostation uploader
+----------------------------------------------------
+1) ladda ner appen photostation uploader
+2) gå in i photos och välj ett album du har gjort, tex album '2015'
+3) välj exportera original och välj plats de ska exporteras till, tex. 'bilder-nas-2'. välj "Skapa en ny mapp" 
+4) Gå sedan in i Finder och leta upp den nya mappaen '2015' under 'bilder-nas-2'. Högerklicka och välj "Photostation"
+5) Välj en profil. Väljer man "admin" så är det admin-användarens konto som får rättigheterna till filerna
 
 
 Exportera till NAS - alt 1
@@ -28,6 +42,14 @@ Gör detta på NAS:
 3.välj målfil, högerklicka. Välj upload.
   
 
+How to use the Photo Station Uploader on a Mac
+-------------------------------------------------
+1) Download and install the App. OK, you knew that, right?)
+2) Create a Profile, which holds the IP address of the NAS that is running Photo Station, and the suitable User ID and Password
+3) Here comes the crunch! Using Finder, locate and highlight one or more image files, that are local on the Mac (does not work with external drives, USB or network shares - this is the "gotcha"!)
+4) Right click on the selection and choose Upload to Photo Station, then select profile. You can have multiple profiles set up for different NAS-es on the same LAN.
+5) You will then get the dialog box to choose a Photo Album folder, or create a new one.
+6) Click the GO button and have a cup of coffee..
 
 
 Ta bort alla bider från iphone
@@ -49,7 +71,3 @@ Exportera till NAS (192.168.1.88)
 9. välj eller välj inte att ta med "sub folder name"
 
 
-
-
-20170321 - importerar bilder från fredriks Iphone6
-20170321 - exporterar ut alla bilder från MAC till NAS, 2015xxxx-201170321: ca 14000+ bilder, 101GB 
