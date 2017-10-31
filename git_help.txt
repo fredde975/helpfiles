@@ -288,6 +288,18 @@ $ git push origin develop
 
 
 
+Incorporating the develop branch into current feature branch
+============================================================
+
+$ git checkout develop
+$ git pull
+Switched to branch 'myFeature'
+$ git checkout myFeature
+$ git pull
+$ git merge --no-ff develop
+Updating ea1b82a..05e9557
+
+
 Delete a remote branch
 =========================
 As of Git v1.7.0, you can delete a remote branch using
