@@ -1,0 +1,117 @@
+
+AWS och docker
+==============
+http://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html#use-ecr
+http://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_GetStarted.html
+
+Getting Started with Amazon EC2 Container Service (ECS)  - https://us-east-2.console.aws.amazon.com/ecs/home?region=us-east-2#/firstRun
+step1. configure repo   fredrik/repo  000986988155.dkr.ecr.us-east-2.amazonaws.com/fredrik/repo
+
+Step 2: Build, tag, and push Docker image
+>aws ecr get-login --region us-east-2
+>docker build -t fredrik/repo .
+>docker tag fredrik/repo:latest 000986988155.dkr.ecr.us-east-2.amazonaws.com/fredrik/repo:latest
+>docker push 000986988155.dkr.ecr.us-east-2.amazonaws.com/fredrik/repo:latest
+
+Step 3: Create a task definition
+Step 4: Configure service
+Step 5: Configure cluster
+
+Resultat:
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Amazon ECS status - 4 of 4 complete 
+Create cluster: default
+Amazon ECS cluster created
+Amazon ECS cluster default
+Create task definition: default console-sample-app-static
+Task definition created
+Task definition console-sample-app-static:1
+Create instances for:default
+Amazon ECS instances created
+Amazon ECS instances for default
+Create service: sample-webapp
+Service created
+Service Created. Tasks will start momentarily. View: sample-webapp
+EC2 instance status - 13 of 13 complete 
+Your EC2 instances and other cluster resources are being created. This may take a few minutes.
+
+CloudFormation stack created
+CloudFormation stack arn:aws:cloudformation:us-east-2:000986988155:stack/EC2ContainerService-default/71ffdfb0-420a-11e7-ac7d-50faf8bc7cfe
+Internet gateway created
+Internet gateway igw-4cd96725
+VPC created
+VPC vpc-0825be61
+Route table created
+Route table rtb-bde48dd4
+VPC attached gateway created
+VPC attached gateway EC2Co-Attac-25QZG63ZKVRJ
+Subnet 1 created
+Subnet 1 subnet-c3a5ccaa
+Subnet 2 created
+Subnet 2 subnet-c062d4bb
+Public routing created
+Public routing EC2Co-Publi-XAZ1N4BBR41P
+Subnet 1 association created
+Subnet 1 association rtbassoc-cf9bc4a6
+Amazon ECS security group created
+Amazon ECS security group sg-66a5860f
+Subnet 2 association created
+Subnet 2 association rtbassoc-6a97c803
+Auto Scaling group created
+Auto Scaling group EC2ContainerService-default-EcsInstanceAsg-DW4HUGNL816G
+Launch configuration created
+Launch configuration EC2ContainerService-default-EcsInstanceLc-US1506AJVP6B
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+Sätta upp docker på windows
+===========================
+  https://store.docker.com/editions/community/docker-ce-desktop-windows
+
+  Install Docker Toolbox on Windows
+  ---------------------------------
+  https://docs.docker.com/toolbox/toolbox_install_windows/
+
+  Efter installation får man en applikation - Docker quickstart terminal. Där kan man köra sin dockerkommandon.
+
+ -starta terminalen från ikon på skrivbordet
+ -då startar docker-machine (en sorts mini linux ...tror jag)
+ :
+ Docker is up and running!
+ To see how to connect your Docker Client to the Docker Engine running on this vi
+ rtual machine, run: C:\dev\Docker Toolbox\docker-machine.exe env default
+
+ I docker terminalen kan man logga in mot aws (steg 2 - ovan)
+
+
+
+
+
+
+kommandon:
+ >docker build .                                -bygger den lokala Dockefile
+ >docker build -t fredrik/repo2 .               
+
+
+
+ What is Docker Machine?
+ ==========================
+ Docker Machine is a tool that lets you install Docker Engine on virtual hosts, and manage the hosts with docker-machine commands. You can use Machine to create Docker hosts on your local Mac or Windows box, on your company network, in your data center, or on cloud providers like Azure, AWS, or Digital Ocean.
+
+ Using docker-machine commands, you can start, inspect, stop, and restart a managed host, upgrade the Docker client and daemon, and configure a Docker client to talk to your host.
+
+ Point the Machine CLI at a running, managed host, and you can run docker commands directly on that host. For example, run docker-machine env default to point to a host called default, follow on-screen instructions to complete env setup, and run docker ps, docker run hello-world, and so forth.
+
+
+ What’s the difference between Docker Engine and Docker Machine?
+===================================================================
+When people say “Docker” they typically mean Docker Engine, the client-server application made up of the Docker daemon, a REST API that specifies interfaces for interacting with the daemon, and a command line interface (CLI) client that talks to the daemon (through the REST API wrapper). Docker Engine accepts docker commands from the CLI, such as docker run <image>, docker ps to list running containers, docker images to list images, and so on.
+
+ Docker Engine
+===============
+ Docker Machine is a tool for provisioning and managing your Dockerized hosts (hosts with Docker Engine on them). Typically, you install Docker Machine on your local system. Docker Machine has its own command line client docker-machine and the Docker Engine client, docker. You can use Machine to install Docker Engine on one or more virtual systems. These virtual systems can be local (as when you use Machine to install and run Docker Engine in VirtualBox on Mac or Windows) or remote (as when you use Machine to provision Dockerized hosts on cloud providers). The Dockerized hosts themselves can be thought of, and are sometimes referred to as, managed “machines”
+
+
+ Uppdatering av images: https://forums.aws.amazon.com/thread.jspa?threadID=179271
+ ================================================================================
+ The approach the ECS team takes with our Docker images is to tag every image with the build ID that produced it, create a new Task Definition for every build, and call UpdateService. You can see this laid out in our blog that talks about using Jenkins with ECS https://blogs.aws.amazon.com/application-management/post/Tx32RHFZHXY6ME1/Set-up-a-build-pipeline-with-Jenkins-and-Amazon-ECS .
+

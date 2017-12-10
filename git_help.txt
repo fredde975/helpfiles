@@ -107,6 +107,24 @@ git log -n 1			: show only log for one commit
 git add				: add files to staging area
 
 
+Visa vad som bilvit commitat lokalt men inte blivit pushat
+==========================================================
+
+$ git log origin/develop..HEAD
+commit db743563333c7fbfbd538f6ca65f9b99b1fbbf1e
+Author: Fredrik Thernelius <fredrik.x.thernelius@arbetsformedlingen.se>
+Date:   Fri Feb 3 12:57:02 2017 +0100
+
+    [buggfix] Fixar för DEMO. Hade inte sparat arbetsformedlarens signatur då arbetssokenden genereras i DataGenerator.java
+
+    commit e5da4e5f4daafe6abe25a0cf15862009dabf19dc
+    Author: Fredrik Thernelius <fredrik.x.thernelius@arbetsformedlingen.se>
+    Date:   Thu Feb 2 13:09:25 2017 +0100
+
+        [buggfix] Fixar för DEMO: sätter properties /af/v1/aktiviteter/demoenv som undatagen tjänst ,  samt skapar ACL för I1
+
+
+
 revert everything done in the branch
 ====================================
 git reset --hard		: reset working dir
@@ -268,6 +286,18 @@ Deleted branch myfeature (was 05e9557).
 $ git push origin develop
 
 
+
+
+Incorporating the develop branch into current feature branch
+============================================================
+
+$ git checkout develop
+$ git pull
+Switched to branch 'myFeature'
+$ git checkout myFeature
+$ git pull
+$ git merge --no-ff develop
+Updating ea1b82a..05e9557
 
 
 Delete a remote branch
