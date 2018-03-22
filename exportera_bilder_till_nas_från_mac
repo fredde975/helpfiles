@@ -24,7 +24,7 @@ Om man inte hade kryssast i rutan "delete after import" så gör man i datorn:
 
 Ladda upp filer till NAS2 med photostation uploader
 ----------------------------------------------------
-1) ladda ner appen photostation uploader
+1) ladda ner appen synology photostation uploader
 2) gå in i photos och välj ett album du har gjort, tex album '2015'
 3) välj exportera original och välj plats de ska exporteras till, tex. 'bilder-nas-2'. välj "Skapa en ny mapp" 
 4) Gå sedan in i Finder och leta upp den nya mappaen '2015' under 'bilder-nas-2'. Högerklicka och välj "Photostation"

@@ -1,0 +1,39 @@
+installera mongodb
+==================
+brew install mongodb
+
+
+att starta mongodb
+==================
+To have launchd start mongodb now and restart at login:
+  brew services start mongodb
+Or, if you don't want/need a background service you can just run:
+  mongod --config /usr/local/etc/mongod.conf
+==> Summary
+🍺  /usr/local/Cellar/mongodb/3.6.3: 19 files, 297.6MB
+
+
+köra mongoklient
+================
+mongo
+
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+test    0.000GB
+
+
+> db.getCollectionNames()
+[ "chapter" ]
+> show collections
+chapter
+> db.chapter.find()
+{ "_id" : ObjectId("5aa2bc5c90686208c31ae156"), "name" : "Reactive Web with Spring Boot", "_class" : "com.example.learningspringbootgettingstarted.Chapter" }
+{ "_id" : ObjectId("5aa2bc5c90686208c31ae157"), "name" : "...and more!", "_class" : "com.example.learningspringbootgettingstarted.Chapter" }
+{ "_id" : ObjectId("5aa2bc5c90686208c31ae155"), "name" : "Quick Start with Java", "_class" : "com.example.learningspringbootgettingstarted.Chapter" }
+{ "_id" : ObjectId("5aa2c03f9068620befb1041b"), "name" : "...and more!", "_class" : "com.example.learningspringbootgettingstarted.Chapter" }
+{ "_id" : ObjectId("5aa2c03f9068620befb10419"), "name" : "Quick Start with Java", "_class" : "com.example.learningspringbootgettingstarted.Chapter" }
+{ "_id" : ObjectId("5aa2c03f9068620befb1041a"), "name" : "Reactive Web with Spring Boot", "_class" : "com.example.learningspringbootgettingstarted.Chapter" }
+
+
