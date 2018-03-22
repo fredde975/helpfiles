@@ -13,6 +13,8 @@ På windows host
 *installera winCDEmu : kan seda dubbelklicka på en .iso för att den ska mountas på en cd med bokstaven V:  
 
 
+
+
 på linux guest
 --------------
 
@@ -24,3 +26,11 @@ på linux guest
 * cd /mnt
 * yum install bzip2
 * ./VBoxLinuxAdditions.run
+
+
+shared folder https://forums.virtualbox.org/viewtopic.php?t=15868
+-------------
+host:  skapa en shared folder med namned share
+guest: sudo mount -t vboxsf share ~/host
+
+
