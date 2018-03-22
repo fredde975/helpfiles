@@ -17,17 +17,12 @@ import java.util.concurrent.Executors;
 public class HandlerTest {
     static long sinceId = 0;
     static long numberOfTweets = 0;
-    static final int count = 100;
-
-    @Test
-    public void getATweet() {
-        makeGetRequest("https://www.arbetsformedlingen.se/rest/pbapi/af/v1/version/");
-    }
+    static final int count = 10;
 
 
     @Test
     public void getATweetFromTwitter() {
-        final String hashTag = "#Mello";
+        final String hashTag = "#Me";
 
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -48,24 +43,6 @@ public class HandlerTest {
     }
 
 
-    private void makeGetRequest(String url) {
-        JdkRequest jdkRequest = new JdkRequest(url);
-        String ERROR_CONNECTION = "Failed to connect to AWS: %s";
-
-        try {
-            JsonResponse response = jdkRequest
-                    .uri()
-                    //  .queryParam("orginalord", orginalord)
-                    .back()
-                    .method(Request.GET)
-                    .fetch()
-                    .as(JsonResponse.class);
-
-            System.out.println(response.body());
-        } catch (IOException e) {
-            String message = String.format(ERROR_CONNECTION, e.getMessage());
-        }
-    }
 
     private static void getTweets(Query query, Twitter twitter, String mode) {
         boolean getTweets = true;
@@ -86,8 +63,7 @@ public class HandlerTest {
                             sinceId = status.getId();//Store sinceId in database
                             System.out.println("sinceId= " + sinceId);
                         }
-                        System.out.println("Id= " + status.getId());
-                        System.out.println("@" + status.getUser().getScreenName() + " : " + status.getUser().getName() + "--------" + status.getText());
+                        System.out.println("Tweet text: " + status.getText());
                         if (forCount == result.getTweets().size() - 1) {
                             maxId = status.getId();
                             System.out.println("maxId= " + maxId);
@@ -109,6 +85,31 @@ public class HandlerTest {
         }
         System.out.println("Total tweets count=======" + numberOfTweets);
     }
+
+    @Test
+    public void getATweet() {
+        makeGetRequest("https://www.arbetsformedlingen.se/rest/pbapi/af/v1/version/");
+    }
+
+    private void makeGetRequest(String url) {
+        JdkRequest jdkRequest = new JdkRequest(url);
+        String ERROR_CONNECTION = "Failed to connect to AWS: %s";
+
+        try {
+            JsonResponse response = jdkRequest
+                    .uri()
+                    //  .queryParam("orginalord", orginalord)
+                    .back()
+                    .method(Request.GET)
+                    .fetch()
+                    .as(JsonResponse.class);
+
+            System.out.println(response.body());
+        } catch (IOException e) {
+            String message = String.format(ERROR_CONNECTION, e.getMessage());
+        }
+    }
+
 
     @Test
     public void getTweets() {
