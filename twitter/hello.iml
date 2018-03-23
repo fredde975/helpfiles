@@ -29,5 +29,6 @@
     <orderEntry type="library" name="Maven: com.jcabi:jcabi-manifests:1.1" level="project" />
     <orderEntry type="library" name="Maven: javax.json:javax.json-api:1.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.twitter4j:twitter4j-core:4.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.14" level="project" />
   </component>
 </module>
