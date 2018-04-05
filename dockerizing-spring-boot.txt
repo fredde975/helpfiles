@@ -1,4 +1,4 @@
-Har man en spring boot applikation kan man göra så här för att dockerize
+Har man en spring boot applikation kan man göra så här för att dockerize: https://spring.io/guides/gs/spring-boot-docker/
 
 
 Skapa en Dockerfile med detta innehåll
