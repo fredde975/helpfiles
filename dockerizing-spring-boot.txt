@@ -1,0 +1,96 @@
+Har man en spring boot applikation kan man göra så här för att dockerize
+
+
+Skapa en Dockerfile med detta innehåll
+======================================
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+ARG JAR_FILE
+ADD ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
+This Dockerfile is very simple, but that’s all you need to run a Spring Boot app with no frills: just Java and a JAR file. 
+The project JAR file is ADDed to the container as "app.jar" and then executed in the ENTRYPOINT.
+
+We added a VOLUME pointing to "/tmp" because that is where a Spring Boot application creates working directories for Tomcat by default. 
+The effect is to create a temporary file on your host under "/var/lib/docker" and link it to the container under "/tmp". 
+This step is optional for the simple app that we wrote here, but can be necessary for other Spring Boot applications if they need to actually write in the filesystem.
+
+To reduce Tomcat startup time we added a system property pointing to "/dev/urandom" as a source of entropy.
+
+
+
+Lägg till dett i pom-filen
+==========================
+ <properties>
+        <docker.image.prefix>springio</docker.image.prefix>
+ </properties>            
+
+
+           <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+
+
+The repository with the image name, which will end up here as springio/gs-spring-boot-docker
+
+The name of the jar file, exposing the Maven configuration as a build argument for docker.
+
+Optionally, the image tag, which ends up as latest if not specified. It can be set to the artifact id if desired.
+
+build image
+==========
+mvn install dockerfile:build
+
+lista imagar
+============
+docker image ls
+
+
+köra imagen
+==========
+docker run -p 8080:8080 -t springio/twitter-kotlin
+
+
+Lista körande containrar
+=======================
+docker ps
+
+CONTAINER ID        IMAGE                     COMMAND                  CREATED             STATUS              PORTS                    NAMES
+ca9e675bd5ab        springio/twitter-kotlin   "java -Djava.securit…"   24 minutes ago      Up 24 minutes       0.0.0.0:8080->8080/tcp   suspicious_dubinsky
+fredrik@Fredriks-MacBook-Pro-2 ~/git/helpfiles (master *)
+
+stoppa körande container
+========================
+docker stop ca9e675bd5ab
+ca9e675bd5ab
+
+push image
+=========
+And you can push the image to dockerhub
+mvn dockerfile:push.
+
+
+deploy
+=======
+you can make dockerfile:push automatically run in the install or deploy lifecycle phases by adding it to the plugin configuration.
+pom.xml
+
+<executions>
+	<execution>
+		<id>default</id>
+		<phase>install</phase>
+		<goals>
+			<goal>build</goal>
+			<goal>push</goal>
+		</goals>
+	</execution>
+</executions>
