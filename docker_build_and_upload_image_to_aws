@@ -1,0 +1,119 @@
+Docker
+Bygg och ladda upp docker image till ECR på omegapoint. Deploya till Elastic Beanstalk.
+
+
+1. docker login --username username --password password 
+2. docker tag my-image username/my-repo 
+3. docker push username/my-repo 
+
+
+utgår från mitt projekt: https://github.com/fredde975/twitter-kotlin.git
+
+
+Dockerfile
+=========
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+ARG JAR_FILE
+ADD ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
+
+pom.xml
+======
+             <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+
+
+
+Bygg en docker image
+====================
+mvn install dockerfile:build
+
+
+
+
+
+springio/twitter-kotlin:latest
+
+
+Logga in på OP:s registry
+==================
+1. Authenticate your Docker client to Amazon ECR
+aws --profile op ecr get-login  --no-include-email
+
+2. använd sedan output för att logga in
+
+Create a new repository
+==================
+aws  --profile op ecr create-repository --repository-name springio/twitter-kotlin
+
+"repository": {
+        "registryId": "000986988155",
+        "repositoryName": "springio/twitter-kotlin",
+        "repositoryArn": "arn:aws:ecr:eu-west-1:000986988155:repository/springio/twitter-kotlin",
+        "createdAt": 1523259629.0,
+        "repositoryUri": "000986988155.dkr.ecr.eu-west-1.amazonaws.com/springio/twitter-kotlin"
+    }
+}
+
+
+
+
+tag image
+========
+before:
+$ docker images
+REPOSITORY                                                         TAG                  IMAGE ID            CREATED             SIZE
+springio/twitter-kotlin                                            latest               ee384b9271c4        5 seconds ago       121MB
+
+Tag the nginx image
+docker tag springio/twitter-kotlin:latest 000986988155.dkr.ecr.eu-west-1.amazonaws.com/springio/twitter-kotlin:latest
+
+after:
+$ docker images
+REPOSITORY                                                                                 TAG                  IMAGE ID            CREATED             SIZE
+000986988155.dkr.ecr.eu-west-1.amazonaws.com/springio/twitter-kotlin    1.0                  ee384b9271c4        7 minutes ago       121MB
+
+
+Push the image to your repository
+=========================
+docker push 000986988155.dkr.ecr.eu-west-1.amazonaws.com/springio/twitter-kotlin
+
+
+
+Deploy to Elastic beanstalk
+===========================
+1. Lägg till en Dockerrun.aws.json med följande innehåll. 
+
+$ cat Dockerrun.aws.json
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "000986988155.dkr.ecr.eu-west-1.amazonaws.com/springio/twitter-kotlin:1.0",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "8080"
+    }
+  ],
+  "Logging": "/var/log/twitter-kotlin"
+}
+
+2. Skapa en EB-application
+eb init --profile op
+
+3 Skapa en miljö 
+eb create -s
+
+4. Om du ska uppdatera din image

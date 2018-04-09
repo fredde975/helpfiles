@@ -1,0 +1,213 @@
+Detta är en bra url som visar hur man skapar en elastic-beanstalk applikation från en spring-boot applikation:
+https://exampledriven.wordpress.com/2017/01/09/spring-boot-aws-elastic-beanstalk-example/
+
+klona detta repo:
+https://github.com/ExampleDriven/spring-boot-aws-elasticbeanstalk-example.git
+
+installera EB CLI
+=================
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html
+
+1. pip install awsebcli --upgrade --user
+
+2. Lägg in sökvägen till eb i pathen
+export PATH=~/Library/Python/2.7/bin/:$PATH
+
+3. source ~/.bash_profile 
+
+
+skapa en EB environment
+=======================
+#Initialize the Elastic Beanstalk environment, select the region and application name.
+eb init --profile op
+
+
+when prompted, select region and application name. For platforms you are presented with the following options
+
+Select a platform.
+1) Node.js
+2) PHP
+3) Python
+4) Ruby
+5) Tomcat
+6) IIS
+7) Docker
+8) Multi-container Docker
+9) GlassFish
+10) Go
+11) Java
+(default is 1):
+
+If your project is compiled into a jar file and runs with embedded web server (the default behaviour of Spring Boot) then choose option 11) Java
+If your project is a war file choose 5) Tomcat
+If your project is build with docker then choose 7) Docker
+
+
+Hela flödet för 'eb init'
+========================
+$ eb init --profile op
+
+Select a default region
+1) us-east-1 : US East (N. Virginia)
+2) us-west-1 : US West (N. California)
+3) us-west-2 : US West (Oregon)
+4) eu-west-1 : EU (Ireland)
+(default is 3): 4
+
+Select an application to use
+1) op-academy-web
+2) [ Create new Application ]
+(default is 2): 2
+
+Enter Application Name
+(default is "spring-boot-aws-elasticbeanstalk-example"):
+Application spring-boot-aws-elasticbeanstalk-example has been created.
+
+Select a platform.
+1) Node.js
+2) PHP
+3) Python
+4) Ruby
+5) Tomcat
+6) IIS
+7) Docker
+8) Multi-container Docker
+9) GlassFish
+10) Go
+11) Java
+12) Packer
+(default is 1): 11
+
+Select a platform version.
+1) Java 8
+2) Java 7
+(default is 1): 1
+Note: Elastic Beanstalk now supports AWS CodeCommit; a fully-managed source control service. To learn more, see Docs: https://aws.amazon.com/codecommit/
+Do you wish to continue with CodeCommit? (y/N) (default is n): y
+
+Select a repository
+1) secret-super-powers
+2) serverless-competence-day
+3) Test
+4) serverless-again
+5) opkoko-register-deviceid
+6) opkoko-mobile-contacts
+7) ophackathon-serverless-test
+8) serverless-poc-gui
+9) [ Create new Repository ]
+(default is 9): 9
+
+Enter Repository Name
+(default is "origin"): spring-boot-aws-elasticbeanstalk-example
+Successfully created repository: spring-boot-aws-elasticbeanstalk-example
+
+Enter Branch Name
+***** Must have at least one commit to create a new branch with CodeCommit *****
+(default is "master"):
+Username for 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/spring-boot-aws-elasticbeanstalk-example':
+Password for 'https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/spring-boot-aws-elasticbeanstalk-example':
+Successfully created branch: master
+Do you want to set up SSH for your instances?
+(Y/n): y
+
+Select a keypair.
+3) aws-eb
+33) [ Create new KeyPair ]
+(default is 32): 3
+
+
+Slutföra konfiguration till code commit
+=======================================
+$ git config --global credential.helper '!aws codecommit credential-helper $@ --profile op'
+fredrik@Fredriks-MacBook-Pro-2 ~/op/AWS_OP/elastic-beanstalk-tests/spring-boot-aws-elasticbeanstalk-example (master *)
+
+$ git config --global credential.UseHttpPath true
+fredrik@Fredriks-MacBook-Pro-2 ~/op/AWS_OP/elastic-beanstalk-tests/spring-boot-aws-elasticbeanstalk-example (master *)
+
+$ git push
+Counting objects: 72, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (58/58), done.
+Writing objects: 100% (72/72), 10.51 KiB | 2.63 MiB/s, done.
+Total 72 (delta 16), reused 0 (delta 0)
+To https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/spring-boot-aws-elasticbeanstalk-example
+ * [new branch]      master -> master
+
+
+Bygg med maven
+==============
+cd spring-boot-example/
+
+mvn clean install
+
+
+Lägg till deploydel i .elasticbeanstalk.yml
+===========================================
+branch-defaults:
+  master:
+    environment: null
+    group_suffix: null
+global:
+  application_name: spring-boot-aws-elasticbeanstalk-example
+  branch: null
+  default_ec2_keyname: aws-eb
+  default_platform: Java 8
+  default_region: eu-west-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: op
+  repository: null
+  sc: git
+  workspace_type: Application
+deploy:                                         <-------------- Lägg till detta
+  artifact: target/demo-0.0.1-SNAPSHOT.jar      <-------------- Lägg till detta
+
+(change the name to match your application’s build artifact name)
+
+
+
+Skapa en environment (gjorde om och struntade i code commit eftersom det blev problem)
+====================
+$ eb create -s
+Enter Environment Name
+(default is spring-boot-aws-elasticbeanstalk-exampl): spring-boot-aws-prod
+Enter DNS CNAME prefix
+(default is spring-boot-aws-prod):
+WARNING: You have uncommitted changes.
+Uploading: [##################################################] 100% Done...
+Environment details for: spring-boot-aws-prod
+  Application name: spring-boot-aws-elasticbeanstalk-example
+  Region: eu-west-1
+  Deployed Version: app-70bc-180406_111156
+  Environment ID: e-emfzuakp7i
+  Platform: arn:aws:elasticbeanstalk:eu-west-1::platform/Java 8 running on 64bit Amazon Linux/2.6.8
+  Tier: WebServer-Standard-1.0
+  CNAME: spring-boot-aws-prod.eu-west-1.elasticbeanstalk.com
+  Updated: 2018-04-06 09:12:10.602000+00:00
+Printing Status:
+INFO: createEnvironment is starting.
+INFO: Using elasticbeanstalk-eu-west-1-000986988155 as Amazon S3 storage bucket for environment data.
+INFO: Created security group named: awseb-e-emfzuakp7i-stack-AWSEBSecurityGroup-17UV2SRB1W82C
+INFO: Created EIP: 34.241.254.244
+ -- Events -- (safe to Ctrl+C)
+
+INFO: Waiting for EC2 instances to launch. This may take a few minutes.
+
+configure ports
+================
+It shows an URL to the instance, open it and see that you get and nginx error page. The reason is that nginx runs on port 80 and it expects our application to run on port 5000 so it can proxy it. The easiest solution is to change our application to listen on port 5000 by adding this to application.properties
+
+server.port=5000
+
+
+Applikationen är tillgänglig på  port 80 men ser att applkationen startar på port 5000 i tomcat
+==================================================================================================
+2018-04-06 09:14:11.808  INFO 3214 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 5000 (http)
+
+
+För att uppdatera applikationen
+===============================
+1. bygg om med 'mvn clean install'
+2. deploya med 'eb deploy --debug'

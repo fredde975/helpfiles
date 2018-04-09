@@ -24,7 +24,7 @@ public class WordItem implements Comparable{
 
     @Override
     public int compareTo(Object that) {
-        return this.count - ((WordItem)that).count;
+        return ((WordItem)that).count - this.count;
     }
 
     @Override

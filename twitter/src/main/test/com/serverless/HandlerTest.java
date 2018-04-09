@@ -11,20 +11,19 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class HandlerTest {
     static long sinceId = 0;
     static long numberOfTweets = 0;
-    static final int count = 1;
+    static final int TWEETS_PER_QUERY = 100;
 
-     Map<String, WordItem>  resultMap = new HashMap<>();
+    Map<String, WordItem> resultMap = new HashMap<>();
 
 
     @Test
     public void getATweetFromTwitter() {
-        final String hashTag = "#Me";
+        final String hashTag = "#bieber";
 
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -35,18 +34,18 @@ public class HandlerTest {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
 
+        Query query = new Query(hashTag);
+        query.setCount(TWEETS_PER_QUERY);
+        query.resultType(Query.ResultType.recent);
+        query.setLang("en");
 
-        //get latest tweets as of now
-        //At this point store sinceId in database
-        Query queryMax = new Query(hashTag);
-        queryMax.setCount(count);
-        getTweets(queryMax, twitter, "maxId");
-        queryMax = null;
-
+        getTweets2(query, twitter);
+        query = null;
 
 
         List<WordItem> wordItems = resultMap.values().stream()
                 .sorted()
+                .limit(10)
                 .collect(Collectors.toList());
 
         wordItems.stream().forEach(System.out::println);
@@ -55,8 +54,7 @@ public class HandlerTest {
     }
 
 
-
-    private void getTweets(Query query, Twitter twitter, String mode) {
+    private void getTweets(Query query, Twitter twitter) {
         boolean getTweets = true;
         long maxId = 0;
         long whileCount = 0;
@@ -69,6 +67,8 @@ public class HandlerTest {
                 } else {
                     System.out.println("***********************************************");
                     System.out.println("Gathered " + result.getTweets().size() + " tweets");
+
+
                     int forCount = 0;
                     for (Status status : result.getTweets()) {
                         if (whileCount == 0 && forCount == 0) {
@@ -78,8 +78,7 @@ public class HandlerTest {
 
                         String text = status.getText();
                         List<String> ord = Arrays.asList(text.split("\\s+"));
-
-                        ord.stream().forEach( word -> addWordToMap(word) );
+                        ord.stream().forEach(word -> addWordToMap(word));
 
 
                         if (forCount == result.getTweets().size() - 1) {
@@ -101,27 +100,90 @@ public class HandlerTest {
             }
             whileCount++;
         }
-        System.out.println("Total tweets count=======" + numberOfTweets);
+        System.out.println("Total tweets TWEETS_PER_QUERY=======" + numberOfTweets);
 
 
     }
 
 
-    private void addWordToMap(String word){
-         if(resultMap.containsKey(word)){
+    private void addWordToMap(String word) {
+        if (resultMap.containsKey(word)) {
             WordItem item = resultMap.get(word);
             resultMap.replace(word, new WordItem(word, item.getCount() + 1));
-         }else{
-             resultMap.put(word, new WordItem(word, 1));
+        } else {
+            resultMap.put(word, new WordItem(word, 1));
+        }
+    }
+
+    private void getTweets2(Query query, Twitter twitter) {
+        int MAX_QUERIES = 5;
+        int TWEETS_PER_QUERY = 100;
+        long maxID = -1;
+        int totalTweets = 0;
+
+        try {
+            //	This is the loop that retrieve multiple blocks of tweets from Twitter
+            for (int queryNumber = 0; queryNumber < MAX_QUERIES; queryNumber++) {
+
+                //does not handle rate limits
+
+                //	If maxID is -1, then this is our first call and we do not want to tell Twitter what the maximum
+                //	tweet id is we want to retrieve.  But if it is not -1, then it represents the lowest tweet ID
+                //	we've seen, so we want to start at it-1 (if we start at maxID, we would see the lowest tweet
+                //	a second time...
+                if (maxID != -1) {
+                    query.setMaxId(maxID - 1);
+                }
+
+                //	This actually does the search on Twitter and makes the call across the network
+                QueryResult r = twitter.search(query);
+
+                //	If there are NO tweets in the result set, it is Twitter's way of telling us that there are no
+                //	more tweets to be retrieved.  Remember that Twitter's search index only contains about a week's
+                //	worth of tweets, and uncommon search terms can run out of week before they run out of tweets
+                if (r.getTweets().size() == 0) {
+                    break;            // Nothing? We must be done
+                }
+
+
+                //	loop through all the tweets and process them.  In this sample program, we just print them
+                //	out, but in a real application you might save them to a database, a CSV file, do some
+                //	analysis on them, whatever...
+                for (Status s : r.getTweets())                // Loop through all the tweets...
+                {
+                    //	Increment our TWEETS_PER_QUERY of tweets retrieved
+                    totalTweets++;
+
+                    //	Keep track of the lowest tweet ID.  If you do not do this, you cannot retrieve multiple
+                    //	blocks of tweets...
+                    if (maxID == -1 || s.getId() < maxID) {
+                        maxID = s.getId();
+                    }
+
+                    String text = s.getText();
+                    List<String> ord = Arrays.asList(text.split("\\s+"));
+                    ord.stream().forEach(word -> addWordToMap(word));
+                }
+            }
+
+
+            System.out.printf("\n\nA total of %d tweets retrieved\n", totalTweets);
+            //	That's all, folks!
+
+        } catch (Exception e) {
+            //	Catch all -- you're going to read the stack trace and figure out what needs to be done to fix it
+            System.out.println("That didn't work well...wonder why?");
+
+            e.printStackTrace();
+
         }
     }
 
 
-    private static void getTweets2(Query query, Twitter twitter) {
+    private static void getTweets3(Query query, Twitter twitter) {
         boolean getTweets = true;
         long maxId = 0;
         long whileCount = 0;
-
 
 
         try {
@@ -171,7 +233,6 @@ public class HandlerTest {
         }
         System.out.println("Total tweets count=======" + numberOfTweets);
     }
-
 
 
     @Test
@@ -260,6 +321,7 @@ public class HandlerTest {
             //Long sum = durations.stream().mapToLong(Long::longValue).sum();
             // System.out.println(Thread.currentThread().getName() + "\t:actualAvarege = " + actualAvarege + "ms");
         }
+
     }
 
 
