@@ -5,6 +5,10 @@ Bygg och ladda upp docker image till ECR på omegapoint. Deploya till Elastic Be
 1. docker login --username username --password password 
 2. docker tag my-image username/my-repo 
 3. docker push username/my-repo 
+ 
+OBS! Måste ge rollen "aws-elasticbeanstalk-ec2-role" läsrättigheter till ECR för att Elastic Beanstalk ska kunna läsa från ECR.
+OBS! Under Permissions for the role, attach policy: AmazonEC2ContainerRegistryReadOnly
+OBS! In ECR there is no need to give any permissions to this role.
 
 
 utgår från mitt projekt: https://github.com/fredde975/twitter-kotlin.git
