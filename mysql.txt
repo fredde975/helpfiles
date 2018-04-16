@@ -1,0 +1,51 @@
+Installation av mysql
+=====================
+
+1. download from: https://dev.mysql.com/downloads/mysql/
+2. kör installationen
+3. skriv upp lösenord
+
+
+Preferences på Mac
+==================
+Kan starta och stoppa mysql här
+
+Lägg till i path i .bash_profile
+================================
+export PATH=/usr/local/mysql/bin:$PATH
+
+
+Byt lösenord
+============
+
+
+Diverse kommandon i mysql
+=========================
+show databases;
+create database hotels;
+grant all on cars.* to 'springuser'@'localhost';
+use cars;
+select * from car;
+
+
+
+Exempel på hur man använder profiler
+====================================
+https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-profiles.html
+
+ex. i application.properties kan man sätta en aktiv profil så här:
+spring.profiles.active=mysql
+
+
+Då väljer man att använda det som ligger i, application-mysql.properties:
+spring.jpa.hibernate.ddl-auto=create
+spring.datasource.url=jdbc:mysql://localhost:3306/cars
+spring.datasource.username=springuser
+spring.datasource.password=ThePassword
+
+
+creating JPA database
+======================
+By default, JPA databases are automatically created only if you use an embedded database (H2, HSQL, or Derby). You can explicitly configure JPA settings by using spring.jpa.* properties. For example, to create and drop tables you can add the following line to your application.properties:
+
+spring.jpa.hibernate.ddl-auto=create-drop
