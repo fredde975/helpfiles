@@ -10,7 +10,10 @@ Det finns två externa hårddiska från "TrekStor" på vardera 500GB. De är mar
 0. koppla in både diskarna i Macen
 1. kopiera bilder från MAC till HEMMA/mac_bilder
 2. syncha över bilderna till JOBBET med kommandot (borttagna filer på HEMMA kommer INTE att tas bort på JOBBET): 
-rsync -r --partial --progress /Volumes/HEMMA/mac_bilder /Volumes/JOBBET/rsync_av_bilder_fran_HEMMA/   
+-r : recursive
+-W : delta-transfer algorithm is not used
+--ignore-existing: ignorera filer som redan finns på target
+rsync -r -W --ignore-existing --partial --progress /Volumes/HEMMA/mac_bilder /Volumes/JOBBET/rsync_av_bilder_fran_HEMMA/   
 
 räkna filer i en katalog
 ========================
