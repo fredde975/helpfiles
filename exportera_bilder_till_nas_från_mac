@@ -16,6 +16,13 @@ räkna filer i en katalog
 ========================
 ls -1 | wc -l
 
+guide för att sätta upp TimeMachine backupper mot SynologyNAS
+=============================================================
+URL: https://www.synology.com/sv-se/knowledgebase/DSM/tutorial/Backup_Restore/How_to_back_up_files_from_Mac_to_Synology_NAS_with_Time_Machine
+
+NAS User: timemachineuser
+password: It's stored in 1Password
+
 
 Importera först bilderna från telefonen. 
 ========================================
