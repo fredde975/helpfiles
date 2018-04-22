@@ -2,6 +2,20 @@
 20170321 - exporterar ut alla bilder från MAC till NAS, 2015xxxx-201170321: ca 14000+ bilder, 101GB
 20171028 - importerar bilder från fredriks Iphone6§:w
 
+ 
+backup process mellan två externa hårddiskar
+============================================
+Det finns två externa hårddiska från "TrekStor" på vardera 500GB. De är markerade med "HEMMA" resp "JOBBET". Tanken är att "JOBBET" inte ska förvaras hemma.
+
+0. koppla in både diskarna i Macen
+1. kopiera bilder från MAC till HEMMA/mac_bilder
+2. syncha över bilderna till JOBBET med kommandot (borttagna filer på HEMMA kommer INTE att tas bort på JOBBET): 
+rsync -r --partial --progress /Volumes/HEMMA/mac_bilder /Volumes/JOBBET/rsync_av_bilder_fran_HEMMA/   
+
+räkna filer i en katalog
+========================
+ls -1 | wc -l
+
 
 Importera först bilderna från telefonen. 
 ========================================
