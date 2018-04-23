@@ -1,0 +1,102 @@
+20170321 - importerar bilder från fredriks Iphone6
+20170321 - exporterar ut alla bilder från MAC till NAS, 2015xxxx-201170321: ca 14000+ bilder, 101GB
+20171028 - importerar bilder från fredriks Iphone6§:w
+
+ 
+backup process mellan två externa hårddiskar
+============================================
+Det finns två externa hårddiska från "TrekStor" på vardera 500GB. De är markerade med "HEMMA" resp "JOBBET". Tanken är att "JOBBET" inte ska förvaras hemma.
+
+0. koppla in både diskarna i Macen
+1. kopiera bilder från MAC till HEMMA/mac_bilder
+2. syncha över bilderna till JOBBET med kommandot (borttagna filer på HEMMA kommer INTE att tas bort på JOBBET): 
+-r : recursive
+-W : delta-transfer algorithm is not used
+--ignore-existing: ignorera filer som redan finns på target
+rsync -r -W --ignore-existing --partial --progress /Volumes/HEMMA/mac_bilder /Volumes/JOBBET/rsync_av_bilder_fran_HEMMA/   
+
+räkna filer i en katalog
+========================
+ls -1 | wc -l
+
+synology på mac
+===============
+den mountade "photos" sharen finns under: 
+/Volumes/photo/
+
+guide för att sätta upp TimeMachine backupper mot SynologyNAS
+=============================================================
+URL: https://www.synology.com/sv-se/knowledgebase/DSM/tutorial/Backup_Restore/How_to_back_up_files_from_Mac_to_Synology_NAS_with_Time_Machine
+
+NAS User: timemachineuser
+password: It's stored in 1Password
+
+
+Importera först bilderna från telefonen. 
+========================================
+1. koppla in telefonen
+2. starta Photos
+3. välj import från vänstermenyn i photos (ovanför Almums och Shared): "iphone"
+4. välj tex import new items
+
+Obs! ---------------->  I Finder visas per default bara "modified date" det går att lägga till "creation date"   <-------------------OBS! 
+
+
+
+Om man inte hade kryssast i rutan "delete after import" så gör man i datorn:
+1. Launch Image Capture.
+2. Koppla in telefon 
+3. Select any/all photos you wish to delete
+4. The Delete button is at the bottom of the window [the 'no-entry' sign]
+
+
+
+Ladda upp filer till NAS2 med photostation uploader
+----------------------------------------------------
+1) ladda ner appen synology photostation uploader
+2) gå in i photos och välj ett album du har gjort, tex album '2015'
+3) välj exportera original och välj plats de ska exporteras till, tex. 'bilder-nas-2'. välj "Skapa en ny mapp" 
+4) Gå sedan in i Finder och leta upp den nya mappaen '2015' under 'bilder-nas-2'. Högerklicka och välj "Photostation"
+5) Välj en profil. Väljer man "admin" så är det admin-användarens konto som får rättigheterna till filerna
+
+
+Exportera till NAS - alt 1
+--------------------------
+Gör detta i "photos":
+If you want to store your original image files on the NAS select all of the photos in the library and with the File ➙ Export Unmodified Originals menu option export the original files to a folder on the Desktop. Then use your uploader to copy that folder to the NAS.
+
+Gör detta på NAS:
+1.Logga in på NAS i browsern.
+2.Öppna filstation.
+3.välj målfil, högerklicka. Välj upload.
+  
+
+How to use the Photo Station Uploader on a Mac
+-------------------------------------------------
+1) Download and install the App. OK, you knew that, right?)
+2) Create a Profile, which holds the IP address of the NAS that is running Photo Station, and the suitable User ID and Password
+3) Here comes the crunch! Using Finder, locate and highlight one or more image files, that are local on the Mac (does not work with external drives, USB or network shares - this is the "gotcha"!)
+4) Right click on the selection and choose Upload to Photo Station, then select profile. You can have multiple profiles set up for different NAS-es on the same LAN.
+5) You will then get the dialog box to choose a Photo Album folder, or create a new one.
+6) Click the GO button and have a cup of coffee..
+
+
+Ta bort alla bider från iphone
+------------------------------
+Just connect your phone using the appropriate cable and open up Image Capture (which should be located in your Applications folder). A window should appear showing all the photos on your phone. Click on the window, then press Command + A to select all your pics. Next, click the delete button (it looks like a circle with a line through it), press Delete when the warning prompt appears, and that's it - you'll have removed all of the photos from your iPhone.
+
+
+Exportera till NAS (192.168.1.88)
+==================================
+1. öppna finder. 
+2. välj "GO" i menyn 
+3. välj connect to server
+4. lägg in ipadressen så får man sedan ett sådant här entry:  smb://192.168.1.88
+5. välj fredrik_bilder och sedan 2016
+
+6. starta Photos och markera de bilder du vill
+7. gå in på File och välj export
+8. välj att exportera original 
+9. välj eller välj inte att ta med "sub folder name"
+
+
