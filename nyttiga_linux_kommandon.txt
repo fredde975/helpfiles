@@ -1,0 +1,4 @@
+
+Ta reda på storleken på ett directory och en nivå ner
+=====================================================
+du -h -d 1
