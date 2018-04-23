@@ -15,6 +15,12 @@ Lägg till i path i .bash_profile
 export PATH=/usr/local/mysql/bin:$PATH
 
 
+Anslut till mysql med
+=====================
+mysql -u root -p
+Enter password:   <Finns i 1Password-Laptop>
+
+
 Byt lösenord
 ============
 
