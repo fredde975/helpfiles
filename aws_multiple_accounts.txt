@@ -1,0 +1,23 @@
+Blog url: https://aws.amazon.com/blogs/security/how-to-use-aws-organizations-to-automate-end-to-end-account-creation/
+
+can download the script and CloudFormation templates to help you automate this end-to-end process. 
+scrips url: https://s3.amazonaws.com/awsiammedia/public/sample/AWSOrganizationsAutomateEndtoEndAccountCreation/AWSOrganizations_AutomateEndtoEndAccountCreation_ScriptandTemplates.zip
+
+assume a role in a different account
+====================================
+User "administrator" in master account assumes a role in the "cloudtrail" account
+
+
+$ aws --profile home-administrator sts assume-role --role-arn arn:aws:iam::635750697306:role/CloudtrailAccountAccessRole --role-session-name cloudtrailsession
+{
+    "AssumedRoleUser": {
+        "AssumedRoleId": "AROAJT3TNF5KHS2U4AXVW:cloudtrailsession",
+        "Arn": "arn:aws:sts::635750697306:assumed-role/CloudtrailAccountAccessRole/cloudtrailsession"
+    },
+    "Credentials": {
+        "SecretAccessKey": "yXw5ud9tXwRBvf+/vByLJ3fD4XKDh9dnLoMMBaS2",
+        "SessionToken": "FQoDYXdzEIz//////////wEaDOfQP3Va5a0hOMKB9iL1AQgv79U8lMwseEV06HwpVrSCR/VjnlzDyC2NE4lGJhOZmgtbR/efodPEy6w8vy7+kWnYvntLP/d3ulao2RN9LmFDy7DZoSUhfulkujSbALV+h11hpDO8ADpvM2OyJS9Bfivg/NwF32yGXY2eP3pm+nnRNE9oHP4AgAp2+yyAtkAZBZkfTDiT9cBt+NU+J6rvPbey8gKbGScqQGLkuSjikgFxyUhOb+gNrGN3KjHMTilyLV10K9pTKDNrRmOv6R8+kpRaA7dGPF4+lYCzo+p3ErRKor5uBnkloOJVvZoM5sESo+haFYYp65BH+c6VjVDU1l7e/D1fKLTmhtcF",
+        "Expiration": "2018-04-26T12:08:36Z",
+        "AccessKeyId": "ASIAIVEGAVX4B3UOIRTQ"
+    }
+}
