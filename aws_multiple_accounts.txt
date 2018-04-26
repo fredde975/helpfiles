@@ -21,3 +21,38 @@ $ aws --profile home-administrator sts assume-role --role-arn arn:aws:iam::63575
         "AccessKeyId": "ASIAIVEGAVX4B3UOIRTQ"
     }
 }
+
+
+ ./organization-new-acc.sh
+usage: organization_new_acc.sh [-h] --account_name ACCOUNT_NAME
+                                      --account_email ACCOUNT_EMAIL
+                                      --cl_profile_name CLI_PROFILE_NAME
+                                      [--ou_name ORGANIZATION_UNIT_NAME]
+                                      [--region AWS_REGION]
+fredrik@Fredriks-MacBook-Pro-2 ~/Downloads/AWSOrganizations_AutomateEndtoEndAccountCreation_ScriptandTemplates
+$ ./organization-new-acc.sh --cl_profile_name home --account_name dev --account_email fredrik.thernelius.aws.dev@gmail.com --ou_name dev --region eu-west-1
+Create New Account
+Unable to locate credentials. You can configure credentials by running "aws configure".
+Waiting for New Account ...usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument --create-account-request-id: expected one argument
+./organization-new-acc.sh: line 58: [: !=: unary operator expected
+usage: aws [options] <command> <subcommand> [<subcommand> ...] [parameters]
+To see help text, you can run:
+
+  aws help
+  aws <command> help
+  aws <command> <subcommand> help
+aws: error: argument --create-account-request-id: expected one argument
+
+Create New CLI Profile
+Waiting for CF Service .......
+CF Service not available
+
+
+
+OBS!!! Scriptet funkade visst inte riktigt!!!!!
