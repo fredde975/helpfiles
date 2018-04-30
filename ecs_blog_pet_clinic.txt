@@ -1,0 +1,48 @@
+
+blog url: https://aws.amazon.com/blogs/compute/deploying-java-microservices-on-amazon-ec2-container-service/
+git url:  https://github.com/aws-samples/amazon-ecs-java-microservices
+
+
+del 1
+=============================================================================
+köra lokalt:
+-----------
+a. mvn clean install
+b. java -jar target/spring-petclinic-rest-1.7.jar alt mvn spring-boot:run 
+c. url 127.0.0.1:8080/pet
+
+
+I del 1 så är alla endpoints tillsammans i en deployment 
+
+
+1. måste installera boto3:
+pip install boto3 --upgrade --user
+
+2. för att köra med rätt profil:
+   Lägg till 
+	boto3.setup_default_session(profile_name="op")
+   i filen setup.py
+
+3.För att köra exemplet:
+python setup.py -m setup -r eu-west-1
+
+4. sista raden i output visar var man kommer åt tjänsten
+http://spring-petclinic-rest-elb-957036426.eu-west-1.elb.amazonaws.com
+
+Lägg sedan till de vanliga /pet, /owner...
+
+output
+:
+:
+INFO:__main__:Create stack status: CREATE_COMPLETE
+INFO:__main__:Creating ELB
+INFO:botocore.vendored.requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): elasticloadbalancing.eu-west-1.amazonaws.com
+INFO:__main__:ELB Target Group created: {"ResponseMetadata": {"RetryAttempts": 0, "HTTPStatusCode": 200, "RequestId": "3336f111-4704-11e8-b2f9-3d372fdbed55", "HTTPHeaders": {"x-amzn-requestid": "3336f111-4704-11e8-b2f9-3d372fdbed55", "date": "Mon, 23 Apr 2018 14:39:59 GMT", "content-length": "1196", "content-type": "text/xml"}}, "TargetGroups": [{"HealthCheckPath": "/", "HealthCheckIntervalSeconds": 30, "VpcId": "vpc-e72bb181", "Protocol": "HTTP", "HealthCheckTimeoutSeconds": 5, "TargetType": "instance", "HealthCheckProtocol": "HTTP", "UnhealthyThresholdCount": 2, "HealthyThresholdCount": 5, "TargetGroupArn": "arn:aws:elasticloadbalancing:eu-west-1:000986988155:targetgroup/spring-petclinic-rest-elb-tg/713b705462b70902", "Matcher": {"HttpCode": "200"}, "HealthCheckPort": "traffic-port", "Port": 80, "TargetGroupName": "spring-petclinic-rest-elb-tg"}]}
+INFO:__main__:ELB Listener Created: {"Listeners": [{"Protocol": "HTTP", "DefaultActions": [{"TargetGroupArn": "arn:aws:elasticloadbalancing:eu-west-1:000986988155:targetgroup/spring-petclinic-rest-elb-tg/713b705462b70902", "Type": "forward"}], "LoadBalancerArn": "arn:aws:elasticloadbalancing:eu-west-1:000986988155:loadbalancer/app/spring-petclinic-rest-elb/26c688c7efdb5a20", "Port": 80, "ListenerArn": "arn:aws:elasticloadbalancing:eu-west-1:000986988155:listener/app/spring-petclinic-rest-elb/26c688c7efdb5a20/e31c5cff6cc8b0bb"}], "ResponseMetadata": {"RetryAttempts": 0, "HTTPStatusCode": 200, "RequestId": "335c2c6a-4704-11e8-b2f9-3d372fdbed55", "HTTPHeaders": {"x-amzn-requestid": "335c2c6a-4704-11e8-b2f9-3d372fdbed55", "date": "Mon, 23 Apr 2018 14:39:59 GMT", "content-length": "990", "content-type": "text/xml"}}}
+INFO:__main__:Create resources for service: spring-petclinic-rest
+INFO:__main__:ELB Target Group created:
+INFO:botocore.vendored.requests.packages.urllib3.connectionpool:Starting new HTTPS connection (1): ecs.eu-west-1.amazonaws.com
+INFO:__main__:Setup is complete your endpoint is http://spring-petclinic-rest-elb-957036426.eu-west-1.elb.amazonaws.com
+
+
+
