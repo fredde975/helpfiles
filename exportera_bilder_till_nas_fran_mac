@@ -31,6 +31,9 @@ URL: https://www.synology.com/sv-se/knowledgebase/DSM/tutorial/Backup_Restore/Ho
 NAS User: timemachineuser
 password: It's stored in 1Password
 
+Verify time machine backups 2.0
+===============================
+To do a verification at any time, click the Time Machine icon  in the menu bar, then press the Option key and choose Verify Backups.
 
 Verify time machine backups
 ===========================
@@ -62,8 +65,9 @@ Ladda upp filer till NAS2 med photostation uploader
 2) gå in i photos och välj ett album du har gjort, tex album '2015'
 3) välj exportera original och välj plats de ska exporteras till, tex. 'bilder-nas-2'. välj "Skapa en ny mapp" 
 4) Gå sedan in i Finder och leta upp den nya mappaen '2015' under 'bilder-nas-2'. Högerklicka och välj "Photostation"
-5) Välj en profil. Väljer man "admin" så är det admin-användarens konto som får rättigheterna till filerna
-
+5.1) Välj en profil. Väljer man "admin" så är det admin-användarens konto som får rättigheterna till fil
+funkar det inte med profil så kör direkt i photostation, se 5.2
+5.2) Starta photostation uploader. välj source och destination folder. starta. 
 
 Exportera till NAS - alt 1
 --------------------------
