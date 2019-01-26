@@ -1,0 +1,53 @@
+git credential helper
+=====================
+Utan profil:
+git config --global credential.helper '!aws codecommit credential-helper $@'
+
+Med en profil:
+git config --global credential.helper '!aws --profile codeDeployUser codecommit credential-helper $@'
+
+git config --global credential.UseHttpPath true
+
+
+The Git credential helper writes the following value to ~/.gitconfig:
+[credential]    
+    helper = !aws --profile codeDeployUser  codecommit credential-helper $@
+    UseHttpPath = true
+
+
+OBS! se till att ha skrivit rätt namn på aws profilen. Hade gjort fel en gång och då det blev det konstigt. Rätt namn gav att allt funkade.
+
+
+
+Detaljerade instruktioner
+========================
+Setup for HTTPS Users Using Git Credentials
+
+ (https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html?icmpid=docs_acc_console_connect)
+
+ 
+1. konfigurera en användare med rätt rättigheter
+jag använder "codeDeployUser"
+
+2. Lägg till "AWSCodeCommitFullAccess" till användaren
+
+3. Create Git Credentials for HTTPS Connections to AWS CodeCommit
+3.1 gå in i IAM på användaren "codeDeployUser" och gå till tabben "security credentials "HTTPS Git credentials for AWS CodeCommit
+3.2 ladda ner credentials
+
+
+
+Setup Steps for HTTPS Connections to AWS CodeCommit Repositories on Linux, macOS, or Unix with the AWS CLI Credential Helper
+==============================================
+
+-Får man 403 på Mac vid git clone, push etc. så läs denna guid:
+https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-https-unixes.html
+
+ 
+Förklaringen är att git credentials läggs in i MAC Keychain och den timar ut efter 15 minuter.
+
+Lösningen är att :
+-öppna "KeyChain Access" applikationen
+-leta upp "git codecommit" 
+-ta bort det entry som finns där.
+
