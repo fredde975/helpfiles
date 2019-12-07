@@ -2,6 +2,17 @@
 20170321 - exporterar ut alla bilder från MAC till NAS, 2015xxxx-201170321: ca 14000+ bilder, 101GB
 20171028 - importerar bilder från fredriks Iphone6§:w
 
+
+Ta bort bilder från iphone men inte från Icloud
+==============================================
+https://www.gihosoft.com/iphone-tips/delete-photos-from-iphone-but-not-icloud.html
+
+1.Go to “Settings” on your iPhone.
+2. Make sure you’ve signed in with your Apple ID.
+3.Click into this path: Apple ID > iCloud > Photos, then turn off iCloud Photos.
+4.You will be prompted to choose “Remove from iPhone” or “Download Photos & Videos”. (If you want to skip this notification, follow these steps offline.)
+5.Now, delete unwanted photos from your iPhone and you are done.
+
  
 backup process mellan två externa hårddiskar
 ============================================
