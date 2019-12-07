@@ -3,6 +3,15 @@
 20171028 - importerar bilder från fredriks Iphone6§:w
 
 
+importera bider från annat Icloud konto
+=======================================
+1. Öppna Safari och Logga in på kontot där bilderna som ska importeras finns
+2. Markera bilderna som ska laddas ner
+3. Välj "Hämta de valda objekten" 
+Nu skapas en zip fil som automatiskt packas upp under /Download/iCloudPictures
+4. Öppna Photos och importera bilder på vanligt sätt
+
+
 Ta bort bilder från iphone men inte från Icloud
 ==============================================
 https://www.gihosoft.com/iphone-tips/delete-photos-from-iphone-but-not-icloud.html
