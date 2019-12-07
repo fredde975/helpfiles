@@ -5,6 +5,9 @@
 
 importera bider från annat Icloud konto
 =======================================
+Obs! Det går bara att hämta max 1000 object åt gången. 
+Testar att hämta från Elins konto sommar 2018 - tom sept 2018, ca 950 object
+
 1. Öppna Safari och Logga in på kontot där bilderna som ska importeras finns
 2. Markera bilderna som ska laddas ner
 3. Välj "Hämta de valda objekten" 
