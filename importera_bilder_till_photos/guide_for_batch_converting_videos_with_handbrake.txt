@@ -1,0 +1,23 @@
+photos KAN importera videofiler av typen: .3gp, .mp4,   
+
+photos KAN INTE importera videofiler av typen: .avi
+-dessa filer måste konverteras till .mp4 innan import
+
+
+handbrake
+---------
+install GUI application:
+>brew install --cask handbrake
+
+install HandbrakeCli:
+>brew install handbrake
+
+1. Skapa ett preset i GUI-applikationen och exportera json konfigurationen till ~/handbrake_movies/
+2. kör kommanot:
+
+
+För att konvertera en fil till .mp4:
+>HandBrakeCLI --preset-import-file fast_1080p_30_to_mp4.json -i in/IMG_20060626_192706.avi -o out/outputfile.mp4
+
+för att konvertera alla filer i en katalog till .mp4:
+>./handbrake_batch_to_mp4.sh in out
