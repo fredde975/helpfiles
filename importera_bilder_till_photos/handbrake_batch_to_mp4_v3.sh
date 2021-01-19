@@ -36,5 +36,8 @@ do
   echo "" | HandBrakeCLI --preset-import-file fast_1080p_30_to_mp4.json -i "$ITEM" -o "$OUTPUT"
 
 #done< <(find "$SOURCE" \( -iname '*.mp4' -or -iname '*.avi'  -or -iname '*.mkv' -or -iname '*.mts' \) -print0)
+
+# fredrik:  for being more specific in files to handle
+# find . -not -iname '*.jpg' -not -iname '*.bmp' -not -iname '*.zip' -not  -type d
 done< <(find "$SOURCE" \( -iname '*.avi'  -or -iname '*.mkv' -or -iname '*.mts' \) -print0)
 
