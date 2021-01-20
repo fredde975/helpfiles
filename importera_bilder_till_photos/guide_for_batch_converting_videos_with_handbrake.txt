@@ -1,4 +1,4 @@
-photos KAN importera videofiler av typen: .3gp, .mp4, .mpg, .mov 
+photos KAN importera videofiler av typen: .3gp, .mp4, .mpg, .mov, .ts 
 
 photos KAN INTE importera videofiler av typen: .avi
 -dessa filer måste konverteras till .mp4 innan import
